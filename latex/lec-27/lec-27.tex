@@ -1,0 +1,139 @@
+\documentclass{article}\usepackage{amsmath,amssymb,amsthm,tikz,tkz-graph,color,chngpage,soul,hyperref,csquotes,graphicx,floatrow,framed,scrextend,mathtools,mathrsfs,setspace}\newcommand*{\QEDB}{\hfill\ensuremath{\square}}\newtheorem*{prop}{Proposition}\renewcommand{\theenumi}{\alph{enumi}}\usepackage[shortlabels]{enumitem}\usepackage[nobreak=true]{mdframed}\usetikzlibrary{matrix,calc}\MakeOuterQuote{"}\usepackage[margin=0.75in]{geometry} \newtheorem{theorem}{Theorem}\newcommand{\Z}{\mathbb Z}\newcommand{\R}{\mathbb R}\newcommand{\Q}{\mathbb Q}\newcommand{\N}{\mathbb N}\newcommand{\x}[1]{\textrm{#1}}\newcommand{\xs}[1]{\textrm{ #1 }}\newcommand{\pr}{\textrm{Pr}}
+\newcommand{\dincludegraphics}{\includegraphics[width=0.5\textwidth]}
+\newcommand{\tincludegraphics}{\includegraphics[width=0.33\textwidth]}
+\newcommand{\sumlim}[3]{\sum\limits_{#1}^{#2}#3}
+\newcommand{\eq}[1]{\begin{equation}#1\end{equation}}
+\newcommand{\w}{\omega}\newcommand{\Om}{\Omega}
+\newcommand{\set}[1]{\{#1\}}
+\newcommand{\scr}[1]{\mathscr{#1}}
+\renewenvironment{leftbar}[2][\hsize]
+{
+    \def\FrameCommand
+    {
+        {\color{#2}\vrule width 3pt}
+        \hspace{0pt}
+    }
+    \MakeFramed{\hsize#1\advance\hsize-\width\FrameRestore}
+}
+{\endMakeFramed}
+\newcommand{\easy}[2]{\begin{leftbar}{#1}#2\end{leftbar}}
+\newcommand{\eqs}[1]{\begin{mdframed}#1\end{mdframed}}
+\newcommand{\simple}[1]{\easy{gray}{\begin{enumerate}[1.]#1\end{enumerate}}}
+\newcommand{\inprod}[2]{\langle #1, #2\rangle}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\newcommand{\items}[1]{\begin{itemize}#1\end{itemize}}
+\newcommand{\bmatl}[1]{\begin{bmatrix*}[l]#1\end{bmatrix*}}
+\newcommand{\bmat}[1]{\begin{bmatrix*}[r]#1\end{bmatrix*}}
+\newcommand{\bmatc}[1]{\begin{bmatrix*}[c]#1\end{bmatrix*}}
+\newcommand{\ds}{\doublespacing}
+\newcommand{\e}{\varepsilon}
+\newcommand{\la}{\lambda}
+\newcommand{\n}[1]{\x{Null}(#1)}
+\newmdenv[topline=false, rightline=false, bottomline=false,%
+  linewidth=3pt, innerrightmargin=0pt, leftmargin=4pt,%
+  innerleftmargin=5pt, skipabove=5pt, skipbelow=5pt]{mdleftbar}
+\newcommand{\example}[2]{\textbf{Example: }\\#1\begin{mdleftbar}\onehalfspacing{#2}\end{mdleftbar}}
+\usetikzlibrary{arrows, automata}
+\newcommand{\dtikz}[1]{
+\begin{center}
+\begin{tikzpicture}[> = stealth, shorten > = 1pt, auto, node distance = 2.5cm,semithick]
+\tikzstyle{every state}=[draw = black,thick,fill = white,minimum size = 4mm]
+#1
+\end{tikzpicture}
+\end{center}
+}
+\newcommand{\ninfty}{n\rightarrow\infty}
+\newcommand{\La}{\Lambda}
+\newcommand{\limty}{\lim_{n\rightarrow\infty}}
+
+\title{EE16A - Lecture 27 Notes}
+\author{Name: Felix Su$\quad$SID: 25794773}
+\date{Spring 2016$\quad$GSI: Ena Hariyoshi}
+\begin{document}
+\maketitle
+
+%%%% Topic %%%%
+\subsection*{Review}
+%%%% Notes %%%%
+\simple{
+    \item \textbf{Eigenvalue-Eigenvector Eq.}: $A\vec{v}=\la\vec{v}$
+}
+\subsection*{Diagonlization}
+\items{
+    \item Set of eigenvectors ($\vec{v}_i$) and eigenvalues ($\la_i$) for $i=1,\ldots,N$ s.t. $\bmat{A\vec{v}_1&\cdots&A\vec{v}_N}=\bmat{\la\vec{v}_1&\cdots&\la\vec{v}_N}$
+    \items{
+        \item Left side: Take out $A$
+        \item Right side: Take out diagonal eigenvalue matrix ($\la$'s)
+        \item $\implies A\bmat{\vec{v}_1&\cdots&\vec{v}_N}=\bmat{\vec{v}_1&\cdots&\vec{v}_N}\bmat{\la_1&&0\\&\ddots&\\0&&\la_n}$
+        \item So, $AV=V\La$
+        \item Postmultiply by $V^{-1}$ on both sides to get $A=V\La V^{-1}$
+    }
+}
+\eqs{
+\textbf{Summary Equation for Eigen Decomposition of Matrix A:}
+\eq{AV=V\La\xs{where} V = \bmat{\vec{v}_1&\cdots&\vec{v}_N}\xs{and}\La=\bmat{\la_1&&0\\&\ddots&\\0&&\la_n}}
+\eq{A=V\La V^{-1}}
+}
+\subsection*{Pagerank}
+\items{
+    \item $A=V\La V^{-1}$
+    \item $s[n]=A^ns[0]$
+    \item $A^n=V\La^nV^{-1}$
+    \items{
+        \item If $\abs{\la_i}>1\rightarrow\la_i^n$ keeps growing
+        \item If $\abs{\la_i}<1\rightarrow\la_i^n$ decays towards 0
+        \item If $\abs{\la_i}=1\rightarrow\la_i^n$ stays the same
+    }
+}
+\example{Pagerank Example
+\dtikz{
+\node[state] (a) {1};
+\node[state] (b) [right of=a]  {2};
+\draw[->] (a) edge[bend left] node {$\frac{1}{2}$} (b);
+\draw[->] (b) edge[bend left] node {$\frac{1}{2}$} (a);
+\draw[->] (a) edge[loop] node {$\frac{1}{2}$} (a);
+\draw[->] (b) edge[loop] node {$\frac{1}{2}$} (b);
+}}{
+$A=\bmat{\frac{1}{2}&\frac{1}{2}\\\frac{1}{2}&\frac{1}{2}}=\frac{1}{2}\bmat{1&1\\1&1}$\\
+1 linearly independent col/row $\implies$ rank(A) = 1\\
+One of the eigenvalues has to be zero: $\la_1=0$, the other is non-zero: $\la_2=n$\\
+0 eigenvalue corresponds to singular matrix\\
+$A$ is a projection matrix onto vector $\vec{r}=\bmat{1\\1}$\\
+Projection matrix $P=\frac{\vec{r}\vec{r}^T}{\vec{r}^T\vec{r}}$\\
+$A$ is symmetric\\
+$A$ is column and row-stochastic (doubly-stochastic)\\
+\textit{column-stochastic matrix = Markoc matrix}
+$A\ge0$ (non-negative)\\
+$A-\la I=\bmat{\frac{1}{2}-\la&\frac{1}{2}\\\frac{1}{2}&\frac{1}{2}-\la}$\\
+$\det(A-\la I)=(\frac{1}{2}-\la)^2-(\frac{1}{2})^2=0\implies\la(1-\la)0$, so, $\la=0,1$\\
+Markov matrices always have 1 as an eigenvalue (All other eigenvalues are smaller), so, as teh system continues to run, the other eignvalues decay to 0 and the eigenvector corresponding to the $\la_i=1$ will be the \textbf{important score} for the website\\
+$\la_1=0, \bmat{\frac{1}{2}&\frac{1}{2}\\\frac{1}{2}&\frac{1}{2}}=0\implies \vec{v}_1=\bmat{1\\-1}$\\
+$\la_2=1, \bmatc{\frac{1}{2}-1&\frac{1}{2}\\\frac{1}{2}&\frac{1}{2}-1}=\bmat{-\frac{1}{2}&\frac{1}{2}\\\frac{1}{2}&-\frac{1}{2}}=0 \implies \vec{v}_2=\bmat{1\\1}$\\
+$V=\bmat{\vec{v}_1&\vec{v}_2}=\bmat{1&1\\-1&1}$\\
+$\La=\bmat{\la_1&0\\0&\la_2}=\bmat{0&0\\0&1}$\\
+$V^{-1}=\frac{1}{ad-bc}\bmat{d&-b\\-c&a}=\bmat{\frac{1}{2}&-\frac{1}{2}\\\frac{1}{2}&\frac{1}{2}}$\\
+$A=V\La V^{-1}=\bmat{1&1\\-1&1}\bmat{0&0\\0&1}\bmat{\frac{1}{2}&-\frac{1}{2}\\\frac{1}{2}&\frac{1}{2}}=\bmat{\vec{v}_1&\vec{v}_2}\bmat{\la_1&0\\0&\la_2}\bmat{\vec{w}_1^T\\\vec{w}_2^T}=\la_1\vec{v}_1\vec{w}_1^T+\la_2\vec{v}_2\vec{w}_2^T$\\
+$A^n=V\La^nV^{-1}=\sumlim{i=1}{N}{\la_i^n\vec{v}_i\vec{w}_i^T}$
+}
+\eqs{
+\textbf{General Form of $n$th Power of a Matrix}
+\eq{A^n=V\La^nV^{-1}=\sumlim{i=1}{N}{\la_i^n\vec{v}_i\vec{w}_i^T}}
+}
+\subsection*{Importance Score for Pagerank}
+\eqs{
+\textbf{Pagerank Importance Score}\\
+Converges to the value $A^ns[0]$ where:
+\eq{\limty A^n=\la_i\vec{v}_i\vec{w}_i^T=\vec{v}_i\vec{w}_i^T\xs{where}\la_i=1\xs{if}\abs{\la_i}<1\forall i=1,\ldots,N-1}
+}
+\subsection*{Preview of Next Lecture}
+\items{
+    \item If $s[n+1]=As[n]$, and $\vec{q}[n]=V^{-1}s[n]\implies \vec{s}[n]=V\vec{q}[n]$
+    \item Then, $V\vec{q}[n+1]=A V\vec{q}[n]\implies\vec{q}[n+1]=V^{-1}A V\vec{q}[n]$
+    \item Because $A=V\La V^{-1}\implies V^{-1}\La V=\La$
+    \item $\therefore \vec{q}[n+1]=\La\vec{q}[n]$
+    \items{
+        \item Decouples dynamic system
+    }
+}
+\end{document}

@@ -1,0 +1,66 @@
+\documentclass{article}\usepackage{amsmath,amssymb,amsthm,tikz,tkz-graph,color,chngpage,soul,hyperref,csquotes,graphicx,floatrow,framed,scrextend,mathtools,mathrsfs,setspace}\newcommand*{\QEDB}{\hfill\ensuremath{\square}}\newtheorem*{prop}{Proposition}\renewcommand{\theenumi}{\alph{enumi}}\usepackage[shortlabels]{enumitem}\usepackage[nobreak=true]{mdframed}\usetikzlibrary{matrix,calc}\MakeOuterQuote{"}\usepackage[margin=0.75in]{geometry} \newtheorem{theorem}{Theorem}\newcommand{\Z}{\mathbb Z}\newcommand{\R}{\mathbb R}\newcommand{\Q}{\mathbb Q}\newcommand{\N}{\mathbb N}\newcommand{\x}[1]{\textrm{#1}}\newcommand{\xs}[1]{\textrm{ #1 }}\newcommand{\pr}{\textrm{Pr}}
+\newcommand{\dincludegraphics}{\includegraphics[width=0.5\textwidth]}
+\newcommand{\tincludegraphics}{\includegraphics[width=0.33\textwidth]}
+\newcommand{\sumlim}[3]{\sum\limits_{#1}^{#2}#3}
+\newcommand{\eq}[1]{\begin{equation}#1\end{equation}}
+\newcommand{\w}{\omega}\newcommand{\Om}{\Omega}
+\newcommand{\set}[1]{\{#1\}}
+\newcommand{\scr}[1]{\mathscr{#1}}
+\renewenvironment{leftbar}[2][\hsize]
+{
+    \def\FrameCommand
+    {
+        {\color{#2}\vrule width 3pt}
+        \hspace{0pt}
+    }
+    \MakeFramed{\hsize#1\advance\hsize-\width\FrameRestore}
+}
+{\endMakeFramed}
+\newcommand{\easy}[2]{\begin{leftbar}{#1}#2\end{leftbar}}
+\newcommand{\eqs}[1]{\begin{mdframed}#1\end{mdframed}}
+\newcommand{\simple}[1]{\easy{gray}{\begin{enumerate}[1.]#1\end{enumerate}}}
+\newcommand{\inprod}[2]{\langle #1, #2\rangle}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\newcommand{\items}[1]{\begin{itemize}#1\end{itemize}}
+\newcommand{\bmatl}[1]{\begin{bmatrix*}[l]#1\end{bmatrix*}}
+\newcommand{\bmat}[1]{\begin{bmatrix*}[r]#1\end{bmatrix*}}
+\newcommand{\bmatc}[1]{\begin{bmatrix*}[c]#1\end{bmatrix*}}
+\newcommand{\ds}{\doublespacing}
+\newcommand{\e}{\varepsilon}
+\newcommand{\la}{\lambda}
+\newcommand{\n}[1]{\x{Null}(#1)}
+\newmdenv[topline=false, rightline=false, bottomline=false,%
+  linewidth=3pt, innerrightmargin=0pt, leftmargin=4pt,%
+  innerleftmargin=5pt, skipabove=5pt, skipbelow=5pt]{mdleftbar}
+\newcommand{\example}[2]{\textbf{Example: }\\#1\begin{mdleftbar}\onehalfspacing{#2}\end{mdleftbar}}
+\usetikzlibrary{arrows, automata}
+\newcommand{\dtikz}[1]{
+\begin{center}
+\begin{tikzpicture}[> = stealth, shorten > = 1pt, auto, node distance = 2.5cm,semithick]
+\tikzstyle{every state}=[draw = black,thick,fill = white,minimum size = 4mm]
+#1
+\end{tikzpicture}
+\end{center}
+}
+\newcommand{\ninfty}{n\rightarrow\infty}
+
+\title{EE16A - Lecture \# Notes}
+\author{Name: Felix Su$\quad$SID: 25794773}
+\date{Spring 2016$\quad$GSI: Ena Hariyoshi}
+\begin{document}
+\maketitle
+
+%%%% Topic %%%%
+\subsection*{Topic}
+%%%% Notes %%%%
+\simple{
+    \item Summary
+}
+\items{
+    \item Content
+}
+\eqs{
+\textbf{Highlight:}\\
+}
+\end{document}

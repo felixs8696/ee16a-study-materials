@@ -1,0 +1,112 @@
+\documentclass{article}\usepackage{amsmath,amssymb,amsthm,tikz,tkz-graph,color,chngpage,soul,hyperref,csquotes,graphicx,floatrow,framed,scrextend,mathtools,mathrsfs}\newcommand*{\QEDB}{\hfill\ensuremath{\square}}\newtheorem*{prop}{Proposition}\renewcommand{\theenumi}{\alph{enumi}}\usepackage[shortlabels]{enumitem}\usepackage[nobreak=true]{mdframed}\usetikzlibrary{matrix,calc}\MakeOuterQuote{"}\usepackage[margin=0.75in]{geometry} \newtheorem{theorem}{Theorem}\newcommand{\Z}{\mathbb Z}\newcommand{\R}{\mathbb R}\newcommand{\Q}{\mathbb Q}\newcommand{\N}{\mathbb N}\newcommand{\x}[1]{\textrm{#1}}\newcommand{\xs}[1]{\textrm{ #1 }}\newcommand{\pr}{\textrm{Pr}}
+\newcommand{\dincludegraphics}{\includegraphics[width=0.5\textwidth]}
+\newcommand{\tincludegraphics}{\includegraphics[width=0.33\textwidth]}
+\newcommand{\sumlim}[3]{\sum\limits_{#1}^{#2}#3}
+\newcommand{\eq}[1]{\begin{equation}#1\end{equation}}
+\newcommand{\w}{\omega}\newcommand{\Om}{\Omega}
+\newcommand{\set}[1]{\{#1\}}
+\newcommand{\scr}[1]{\mathscr{#1}}
+\renewenvironment{leftbar}[2][\hsize]
+{
+    \def\FrameCommand
+    {
+        {\color{#2}\vrule width 3pt}
+        \hspace{0pt}
+    }
+    \MakeFramed{\hsize#1\advance\hsize-\width\FrameRestore}
+}
+{\endMakeFramed}
+\newcommand{\easy}[2]{\begin{leftbar}{#1}#2\end{leftbar}}
+\newcommand{\eqs}[1]{\begin{mdframed}#1\end{mdframed}}
+\newcommand{\simple}[1]{\easy{gray}{\begin{enumerate}[1.]#1\end{enumerate}}}
+\newcommand{\inprod}[2]{\langle #1, #2\rangle}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\newcommand{\items}[1]{\begin{itemize}#1\end{itemize}}
+\newcommand{\bmat}[1]{\begin{bmatrix*}[r]#1\end{bmatrix*}}
+\newcommand{\ds}{\doublespacing}
+\newcommand{\e}{\varepsilon}
+\newcommand{\n}[1]{\x{Null}(#1)}
+
+\title{EE16A - Lecture 22 Notes}
+\author{Name: Felix Su$\quad$SID: 25794773}
+\date{Spring 2016$\quad$GSI: Ena Hariyoshi}
+\begin{document}
+\maketitle
+
+%%%% Topic %%%%
+\subsection*{Least Squares Geometric Argument}
+%%%% Notes %%%%
+\simple{
+    \item Best estimate (1D): $\hat{b}=\frac{\vec{a}^T\vec{b}}{\vec{a}^T\vec{a}}\vec{a}$ where $\frac{\vec{a}^T\vec{b}}{\vec{a}^T\vec{a}}$= best scalar $x$
+    \item Best estimate (Multi-D): $x=(A^TA)^{-1}A^Tb$
+    \item Error Vector: $\e=\vec{b}-A\vec{x}$ because $\vec{b}\not \in\x{ span}\set{\vec{a_1},\ldots,\vec{a_n}}$
+    \item Goal: Minimize $\norm{\e}^2$ over all possible $\vec{x}$
+    \item Best $\vec{x}$ ensures that $\e\bot\sumlim{i=1}{n}{\alpha_i\vec{a}_i} \forall \alpha_i \in \R \implies \e\bot a_n$ where $a_n$ = each column vector of $A$
+    \item $(A^TA)^{-1}$ exists iff $A$ has full col. rank (if $A^TA$ is invertible, can't solve), $n>>m\implies$ this will happen. 
+}
+\items{
+    \item Dim($A$)=$n\times m$, Dim($x$)=$m\times 1$, Dim($b$)=$n\times 1$\
+   \items{
+        \item Generally $n>m$
+    }
+    \item \textbf{Claim:} $A^TA$ is invertible iff $A$ has linearly independent columns.
+    \item \textbf{Proof:} Show $\n{A^TA}=\n{A}$
+    \items{
+        \item $A^TA$ guaranteed to be square $m\times m$
+        \item Forward: $\vec{q}\in\n{A}, \exists\vec{q}\ne0\implies\vec{q}\in\n{A^TA}$
+        \items{
+            \item Because $A\vec{q}=0\implies A^TA\vec{q}=A^T0=0$
+        }
+        \item Backward (Converse): $\vec{r}\in\n{A^TA}, \exists\vec{r}\ne0\implies\vec{r}\in\n{A}$
+        \items{
+            \item Because $A^TA\vec{r}=0\implies \vec{r}^TA^TA\vec{r}=\inprod{A\vec{r}}{A\vec{r}}=\norm{A\vec{r}}^2=\vec{r}^T0=0$ (\textbf{Transpose of a dot product reverses the order of the operands in the product})
+            \item $\norm{A\vec{r}}^2=0\implies A\vec{r}=0 \implies\vec{r}\in\n{A}$
+        }
+        \item Proves $\n{A^TA}$ and $\n{A}$ have the same null space.
+    }
+    \item Only vector in null space of $\n{A^TA}$ is $\vec{0}\implies$ columns of $A$ are linearly independent.
+}
+\eqs{
+\textbf{Inverse Formula for $2\times 2$ Matrix:}
+\eq{\bmat{a&b\\c&d}^{-1}=\frac{1}{ad-bc}\bmat{d&-b\\-c&a}}
+}
+\textbf{Line of Best Fit}
+\items{
+    \item Example: $t_1=0, t_2=1, t_2=2$ and $y(t)=-1,y(t)=-3,y(t)=1$, Find $y(t)=x_1t+x_2$
+    \item Set up $A\vec{x}=\vec{y(t_n)}$
+    \item Solve for $A^TA$
+}
+\eqs{
+\textbf{Line of Best Fit Example}
+\eq{\bmat{0&1\\1&1\\2&1}\bmat{x_1\\x_2}=\bmat{y(t_1)=-1\\y(t_2)=-3\\y(t_3)=1}}
+\textbf{Find $A^TA$}
+\eq{\bmat{0&1&2\\1&1&1}\bmat{0&1\\1&1\\2&1}=\bmat{5&3\\3&3}}
+\textbf{Find $(A^TA)^{-1}$}
+\eq{\frac{1}{6}\bmat{3&-3\\-3&5}=\bmat{\frac{1}{2}&-\frac{1}{2}\\-\frac{1}{2}&\frac{5}{6}}}
+\textbf{Find $x=(A^TA)^{-1}A^Tb$}
+\eq{\bmat{\frac{1}{2}&-\frac{1}{2}\\-\frac{1}{2}&\frac{5}{6}}\bmat{0&1&2\\1&1&1}\bmat{-1\\-3\\1}=\bmat{-\frac{1}{2}&0&\frac{1}{2}\\\frac{5}{6}&\frac{2}{3}&\frac{1}{6}}\bmat{-1\\-3\\1}=\bmat{1\\-2}}
+\textbf{Plug in to solve for $y(t)$}
+\eq{y(t)=x_1t+x_2=t-2}
+\textbf{Find $\e=\vec{b}-A\vec{x}$}
+\eq{\e=\bmat{1\\-2\\1}}
+\textbf{Determine $\norm{\e}^2$}
+\eq{\norm{\e}^2=1^2+(-2)^2+1^2=6}
+}
+%%%% Topic %%%%
+\subsection*{Least Squares Calculus Argument}
+%%%% Notes %%%%
+\simple{
+    \item Smallest $\norm{\e}^2$ is the sum of the squares of the distance between each actual measurement (point) and the line of best fit.
+}
+\eqs{
+\textbf{Least Squares Calculus:}
+\eq{\norm{\e}^2=\sumlim{i=1}{n(=3)}{\e^2}=\sumlim{i=1}{n(=3)}{(x_1t_i+x_2-y(t_i))^2}=(x_2+1)^2+(x_1+x_2+3)^2+(2x_1+x_2-1)^2}
+\textbf{Find minimum w.r.t $x_1$:}
+\eq{\frac{\partial\norm{\e}}{\partial x_1}=0+2(x_1+x_2+3)+4(2x_1+x_2-1)=0\implies 10x_1+6x_2=-2}
+\textbf{Find minimum w.r.t $x_2$:}
+\eq{\frac{\partial\norm{\e}}{\partial x_2}=2(x_2+1)+2(x_1+x_2+3)+2(2x_1+x_2-1)=0\implies x_1+x_2=-1}
+\textbf{Solve for $x_1,x_2$:}
+\eq{x_1=-x_2-1, 10(-x_2-1)+6x_2=-2, x_2=-2, x_1=1}
+}
+\end{document}

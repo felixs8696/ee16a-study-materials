@@ -1,0 +1,65 @@
+\documentclass{article}\usepackage{amsmath,amssymb,amsthm,tikz,tkz-graph,color,chngpage,soul,hyperref,csquotes,graphicx,floatrow}\newcommand*{\QEDB}{\hfill\ensuremath{\square}}\newtheorem*{prop}{Proposition}\renewcommand{\theenumi}{\alph{enumi}}\usepackage[shortlabels]{enumitem}\usepackage[nobreak=true]{mdframed}\usetikzlibrary{matrix,calc}\MakeOuterQuote{"}\usepackage[margin=0.75in]{geometry} \newtheorem{theorem}{Theorem}
+\newcommand{\dincludegraphics}{\includegraphics[width=0.5\textwidth]}
+\newcommand{\tincludegraphics}{\includegraphics[width=0.33\textwidth]}
+
+\title{EE16A - Lecture 17 Notes}
+\author{Name: Felix Su$\quad$SID: 25794773}
+\date{Spring 2016$\quad$GSI: Ena Hariyoshi}
+\begin{document}
+\maketitle
+
+%%%% Topic %%%%
+\subsection*{Check Negative Feedback}
+%%%% Notes %%%%
+\textbf{Inverting Amplifier}
+\begin{enumerate}[1.]
+    \item Set any input to 0 (Replace all voltage sources with short circuits, all current sources with open circuits)
+    \item Dink the output
+    \begin{itemize}
+        \item Check how $V_err$ and $V_in$ are changing (increase/decrease)
+        \item Positive feedback loop: dink causes $V_out$ to slam into a rail
+        \item Negative Feedback Loop: dink minimized $V_err$ and causes $V_out$ to track $V_in$
+    \end{itemize}
+    \item Allows you to apply GR 2: $V^+$ = $V^-$
+\end{enumerate}
+%%%% Topic %%%%
+\subsection*{Check Negative Feedback}
+%%%% Notes %%%%
+\textbf{Design Example 1}
+Using only R's \& op-amps \& voltage sources, implement a current source whose value is proportional to a central voltage
+\begin{enumerate}[1.]
+    \item State the Goal: Voltage Controlled Current Source (VCCS)
+    \begin{itemize}
+        \item Control Voltage ($V_c$) to create a fixed current ($g_mV_c$ ($g_m$ = Amps/V))
+        \item Value of current source depends on control voltage
+        \item 4 terminals (2 terminal for voltage, 2 terminals to create current at the output)
+        \item 2 separate circuits, but no current between the two circuits
+    \end{itemize}
+    \item Describe a Strategy: Block Diagram
+    \begin{itemize}
+        \item Need relationship between voltage and current (Ohm's Law)
+        \item Measure voltage $\rightarrow$ pass through resister $\rightarrow$ measure output current
+    \end{itemize}
+    \item Implement the strategy: Voltage Source and Resistor
+    \begin{itemize}
+        \item Simplest circuit that satisfies the criteria of the strategy and goal: Voltage source and resistor
+            \begin{itemize}
+                \item Only 2 nodes (1 voltage source) - need 4 
+                \item Create additional loop after resistor (at 0 volts to get $I = \frac{V}{R}$ and not allow current to flow into it: OpAmp)
+             \end{itemize}
+        \item OpAmp
+            \begin{itemize}
+                \item Connect the circuit after the R to one of the inputs of the OpAmp to divert the current away from ground, but maintain $0I$ and $0V$ ($O^+$)
+                \item Connect the other input to ground
+                \item Connect the OpAp output terminal as the remaining ($O^-$)
+            \end{itemize}
+    \end{itemize}
+    \item Verify That the Strategy Works
+    \begin{itemize}
+        \item If you dink the output $O^-$, the input from the original circuit will always increase, which means it must be $V^-$ and the other has to be $V^+$ to maintain negative feedback.
+        \item GR1: $I^+=I^-=0$; GR 2:$V_c$ = $V_R$ (KVL)
+        \item $I = \frac{V_R}{R} = \frac{V_c}{R}$, By design, I flows through output terminals in original goal ($I = \frac{V_c}{R} = g_mV_c$)
+        \item $V_c$ is not open circuit, like goal wants, so add a buffer (opamp) between voltage source and rest of the circuit
+    \end{itemize}
+\end{enumerate}
+\end{document}

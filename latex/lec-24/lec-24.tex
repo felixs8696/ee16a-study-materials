@@ -1,0 +1,158 @@
+\documentclass{article}\usepackage{amsmath,amssymb,amsthm,tikz,tkz-graph,color,chngpage,soul,hyperref,csquotes,graphicx,floatrow,framed,scrextend,mathtools,mathrsfs}\newcommand*{\QEDB}{\hfill\ensuremath{\square}}\newtheorem*{prop}{Proposition}\renewcommand{\theenumi}{\alph{enumi}}\usepackage[shortlabels]{enumitem}\usepackage[nobreak=true]{mdframed}\usetikzlibrary{matrix,calc}\MakeOuterQuote{"}\usepackage[margin=0.75in]{geometry} \newtheorem{theorem}{Theorem}\newcommand{\Z}{\mathbb Z}\newcommand{\R}{\mathbb R}\newcommand{\Q}{\mathbb Q}\newcommand{\N}{\mathbb N}\newcommand{\x}[1]{\textrm{#1}}\newcommand{\xs}[1]{\textrm{ #1 }}\newcommand{\pr}{\textrm{Pr}}
+\newcommand{\dincludegraphics}{\includegraphics[width=0.5\textwidth]}
+\newcommand{\tincludegraphics}{\includegraphics[width=0.33\textwidth]}
+\newcommand{\sumlim}[3]{\sum\limits_{#1}^{#2}#3}
+\newcommand{\eq}[1]{\begin{equation}#1\end{equation}}
+\newcommand{\w}{\omega}\newcommand{\Om}{\Omega}
+\newcommand{\set}[1]{\{#1\}}
+\newcommand{\scr}[1]{\mathscr{#1}}
+\renewenvironment{leftbar}[2][\hsize]
+{
+    \def\FrameCommand
+    {
+        {\color{#2}\vrule width 3pt}
+        \hspace{0pt}
+    }
+    \MakeFramed{\hsize#1\advance\hsize-\width\FrameRestore}
+}
+{\endMakeFramed}
+\newcommand{\easy}[2]{\begin{leftbar}{#1}#2\end{leftbar}}
+\newcommand{\eqs}[1]{\begin{mdframed}#1\end{mdframed}}
+\newcommand{\simple}[1]{\easy{gray}{\begin{enumerate}[1.]#1\end{enumerate}}}
+\newcommand{\inprod}[2]{\langle #1, #2\rangle}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\newcommand{\items}[1]{\begin{itemize}#1\end{itemize}}
+\newcommand{\bmat}[1]{\begin{bmatrix*}[r]#1\end{bmatrix*}}
+\newcommand{\ds}{\doublespacing}
+\newcommand{\e}{\varepsilon}
+\newcommand{\n}[1]{\x{Null}(#1)}
+
+\title{EE16A - Lecture 24 Notes}
+\author{Name: Felix Su$\quad$SID: 25794773}
+\date{Spring 2016$\quad$GSI: Ena Hariyoshi}
+\begin{document}
+\maketitle
+
+%%%% Topic %%%%
+\subsection*{Review}
+%%%% Notes %%%%
+\items{
+    \item Redundant (Overcomplete) Dictionary of vectors $D=\set{\phi_l},\phi_l\in\R^N$
+    \item $N$ = length of each player's message
+    \item span$\set{\phi_l}=\R^N$
+    \item $D$ contains no fewer than $N$ lin. ind. vectors
+    \item $y=\sumlim{l=1}{m-1}{\alpha_l\vec{z}_l}$
+    \items{
+        \item $\vec{z}_l$: message form the $l$th player
+        \item $\alpha_l$: scalars
+        \item Simplified model: ignoring time delay $S^{N_k}$
+        \item of the $L=2000$ players, very few are talking to us at any given time window
+        \item Assume: All $\norm{\phi_l}=1$, if not, normalize
+    }
+    \item Use Matching Pursuit Algorithm to solve for $y$
+    \items{
+        \item Continuously match with the best vector in the dictionary
+        \item Minimize residual vector each time using local optimization
+    }
+}
+%%%% Topic %%%%
+\subsection*{Another View of Matching Pursuit Algorithm}
+%%%% Notes %%%%
+\items{
+    \item Initialize: 
+    \items{
+        \item Residual= $y$ at iteration 0: $r_0=y$
+        \item $A_0=[\quad]$, placeholder matrix for the matched distionary vectors
+    }
+    \item While $r_m\ge\e$, continue (Here: $\e=0$)
+    \begin{enumerate}[1.]
+        \item Look for the vector that gives the best match: $k=\x{argmax}_i\abs{\inprod{r_m,\vec{z}_i}}$
+        \item $k$ is the largest projection between the current residual and all the vectors in the dictionary $D$.
+        \item $\vec{v}_m=\vec{z}_k$ is the vector in the dictionary the gives the projection $k$
+        \item Augment matrix $A$ with $\vec{v}_m$ as a new column: $A_m=\bmat{A_{m-1}&\vec{v}_m}$
+        \item Model received signal as a linear combination of the columns of the $A$ matrix up to this point  + error term:
+        \items{
+            \item $\vec{y}=A_m\vec{\alpha}_m+\vec{r}_m$
+            \item $A_1\alpha_1$ is the best estimate at iteration 1 of the received signal $\vec{y}$: $A_m\alpha_M=\vec{y}_m$
+            \item Best $\alpha$ for answer is given by the Least Squares formula: $\alpha_m=(A_M^TA_m)^{-1}A_m^T\vec{y}$
+        }
+        \item $\vec{r}_m=\vec{y}-\vec{y}_m=y-A_m\alpha_m$
+    \end{enumerate}
+    \item \textbf{Problem:}
+    \items{
+        \item Matrix $A$ keeps getting wider on every iteration
+        \item Eacch iteration you have to compute $(A_m^TA_m)^{-1}$, which is too costly
+    }
+    \item \textbf{Solution:}
+    \items{
+        \item Try to construct matrix $A$ at each iteration that has \textit{orthonormal} columns
+        \item $\alpha_m=(A_M^TA_m)^{-1}A_m^T\vec{y}$
+        \item $\vec{y}_m=A_m(A_M^TA_m)^{-1}A_m^T\vec{y}$
+        \item If $A_m$ has orthonormal cols, (if all $\vec{v}_k$'s are orthonormal): $A_m^TA_m=T$
+        \item Thus, $\vec{y}_m=A_m(A_m^Ty)=\sumlim{i=1}{m}{\inprod{\vec{v}_i}{\vec{y}}\vec{v}_i}$
+    }
+}
+%%%% Topic %%%%
+\subsection*{Gram-Schmidt Orthogonlization (Orthonormalization)}
+%%%% Notes %%%%
+\items{
+    \item Have $\vec{v}_1,\ldots,\vec{v}_m$ lin. ind. vectors $V_m=$span$\set{\vec{v}_1,\ldots,\vec{v}_m}$
+    \item \textbf{Claim:} We can find another set of vectors $\vec{z}_1,\ldots,\vec{z}_m$ that are mutually orthogonal and for which $Z_m=\x{span}\set{\vec{z}_1,\ldots,\vec{z}_m}=$span$\set{\vec{v}_1,\ldots,\vec{v}_m}=V_m$
+    \items{
+        \item Once we have $\vec{z}_1,\ldots,\vec{z}_m$, we can construct vectors $\vec{q}_i=\frac{\vec{z}_i}{\norm{\vec{z}_i}}, i=1,\ldots,m$
+        \item $Q_m=$span$\set{\vec{q}_1,\ldots,\vec{q}_m}=V_m=Z_m$ where $\inprod{\vec{q}_l}{\vec{q}_k}=1$ when $k=l$ and $\inprod{\vec{q}_l}{\vec{q}_k}=0$ when $k\ne l$
+        \item All $\vec{q}_i$'s are orthonormal
+    }
+    \item \textbf{Proof} (By construction):
+    \items{
+        \item $\vec{v}_1, \vec{v}_2, \vec{v}_3$ are linearly independent
+        \item Let $\vec{z}_1=\vec{v}_1$: 1st principal direction of the orthogonal set
+        \item $\vec{z}_2=\vec{v}_2-\alpha\vec{z}_1$ s.t. $\vec{z}_2\bot\vec{z}_1$
+        \items{
+            \item $\inprod{\vec{z}_2}{\vec{z}_1}=\inprod{\vec{v}_2-\alpha\vec{z}_1}{\vec{z}_1}=0$
+            \item $\inprod{\vec{v}_2}{\vec{z}_1}-\alpha\inprod{\vec{z}_1}{\vec{z}_1}=0\implies\frac{\inprod{\vec{v}_2}{\vec{z}_1}}{\inprod{\vec{z}_1}{\vec{z}_1}}$
+            \item $\vec{z}_2=\vec{v}_2-\frac{\inprod{\vec{v}_2}{\vec{z}_1}}{\inprod{\vec{z}_1}{\vec{z}_1}}\vec{z}_1$
+            \item $\vec{z}_2$ is the 2nd principal direction in the orthogonal set 
+        }
+        \item $\vec{z}_2=\vec{z}_3-\alpha_1\vec{z}_1-\alpha_2\vec{z}_2=\vec{v}_3-\sumlim{l=1}{2}{\alpha_l\vec{z}_l}$ s.t. $\vec{z}_3\bot\vec{z}_1\x{\&}\vec{z}_3\bot\vec{z}_2$
+        \items{
+            \item $\inprod{\vec{z}_3}{\vec{z}_1}=\inprod{\vec{v}_3-\alpha_1\vec{z}_1-\alpha_2\vec{z}_2}{\vec{z}_1}=0$
+            \item $\inprod{\vec{z}_3}{\vec{z}_2}=\inprod{\vec{v}_3-\alpha_1\vec{z}_1-\alpha_2\vec{z}_2}{\vec{z}_2}=0$
+            \item Solve for $\vec{z}_3=\vec{v}_3-\frac{\inprod{\vec{v}_3}{\vec{z}_1}}{\inprod{\vec{z}_1}{\vec{z}_1}}\vec{z}_1-\frac{\inprod{\vec{v}_3}{\vec{z}_2}}{\inprod{\vec{z}_2}{\vec{z}_2}}\vec{z}_2$
+            \item $\vec{z}_3$ is the 3nd principal direction in the orthogonal set 
+        }
+        \item Continuing in this way: $\vec{z}_n=\vec{v}_n-\sumlim{i=1}{n-1}{\frac{\inprod{\vec{v}_n}{\vec{z}_i}}{\inprod{\vec{z}_i}{\vec{z}_i}}\vec{z}_i}$
+        \item Gets the Orthogonal set, but still need to normalize
+        \items{
+            \item Get orthonormalized set $\vec{q}_1,\ldots,\vec{q}_m$ where $\vec{q}_l=\frac{\vec{z}_l}{\norm{\vec{z}_l}}$
+            \item Orthonormal Representation of Principal Direction: 
+            \items{
+                \item $\alpha_l=\frac{\inprod{\vec{v}_m}{\vec{z}_l}}{\inprod{\vec{z}_l}{\vec{z}_l}}$
+                \item $\vec{z}_l=\norm{\vec{z}_l}\vec{q}_l$
+                \item $\vec{v}_m=\vec{z}_m+\sumlim{l=1}{m-1}{\alpha_l\vec{z}_l}=\norm{\vec{z}_m}\vec{q}_m+\sumlim{l=1}{m-1}{\alpha_l\norm{\vec{z}_l}\vec{q}_l}=\sumlim{l=1}{m}{\alpha_l\norm{\vec{z}_l}\vec{q}_l}=\sumlim{l=1}{m}{r_{lm}\vec{q}_l}$
+            }
+        }
+        \item This gets $A=QR$ where:
+        \items{
+            \item $R$ is composed of elements $r_{lm}$ and is upper triangular
+            \item $Q$ is the orthonormalized matrix $\bmat{\vec{q}_1&\ldots&\vec{q}_m}$
+            \item $A$ is the original principal direction matrix $\bmat{\vec{v}_1&\ldots&\vec{v}_m}$
+            \item $Q^TQ=I$
+        }
+    }
+}
+\textbf{Gram Schmidt Orthogonalization:}
+\eqs{
+\textbf{1st principal direction in the orthogonal set}
+\eq{\vec{z}_1=\vec{v}_1}
+\textbf{$n$-th principal direction in the orthogonal set}
+\eq{\vec{z}_n=\vec{v}_n-\sumlim{i=1}{n-1}{\frac{\inprod{\vec{v}_n}{\vec{z}_i}}{\inprod{\vec{z}_i}{\vec{z}_i}}\vec{z}_i}}
+\textbf{Orthonormal Representation of Principal Direction}\\
+$R$ is composed of elements $r_{lm}$ and is upper triangular\\
+$Q$ is the orthonormalized matrix $\bmat{\vec{q}_1&\ldots&\vec{q}_m}$\\
+$A$ is the original principal direction matrix $\bmat{\vec{v}_1&\ldots&\vec{v}_m}$
+\eq{A=QR}
+\eq{\vec{v}_m=\sumlim{l=1}{m}{r_{lm}\vec{q}_l}}
+}
+\end{document}

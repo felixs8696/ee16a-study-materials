@@ -1,0 +1,61 @@
+\documentclass{article}\usepackage{amsmath,amssymb,amsthm,tikz,tkz-graph,color,chngpage,soul,hyperref,csquotes,graphicx,floatrow}\newcommand*{\QEDB}{\hfill\ensuremath{\square}}\newtheorem*{prop}{Proposition}\renewcommand{\theenumi}{\alph{enumi}}\usepackage[shortlabels]{enumitem}\usepackage[nobreak=true]{mdframed}\usetikzlibrary{matrix,calc}\MakeOuterQuote{"}\usepackage[margin=0.75in]{geometry} \newtheorem{theorem}{Theorem}\newcommand{\Z}{\mathbb Z}\newcommand{\R}{\mathbb R}\newcommand{\Q}{\mathbb Q}\newcommand{\N}{\mathbb N}\newcommand{\x}[1]{\textrm{ #1 }}\newcommand{\pr}{\textrm{Pr}}
+\newcommand{\dincludegraphics}{\includegraphics[width=0.5\textwidth]}
+\newcommand{\tincludegraphics}{\includegraphics[width=0.33\textwidth]}
+
+\title{EE16A - Lecture 19 Notes}
+\author{Name: Felix Su$\quad$SID: 25794773}
+\date{Spring 2016$\quad$GSI: Ena Hariyoshi}
+\begin{document}
+\maketitle
+
+%%%% Topic %%%%
+\subsection*{Positioning (Acoustic Locationing)}
+%%%% Notes %%%%
+\begin{itemize}
+    \item Need $d+1$ known points/distances to determine position in $d$ dimension
+    \item 2D - intersection of 3 circles
+\end{itemize}
+\textbf{Keep track of Time}
+\begin{itemize}
+    \item Determine distance from time it takes signal to arrive at receiver divided by the speed of the signal
+    \item Need reference time $t_o$
+    \item Synchronized clocks between receiver and beacon
+\end{itemize}
+\textbf{Time Sampling}
+\begin{itemize}
+    \item Continuous signal is a function $a(t) \R \mapsto \R$
+    \item Sample the signal every $T$ seconds (sampling period (secs))
+    \item Sample frequency $\frac{ 1T} Hz$
+    \item This defines a new \textbf{discrete time signal} that is defined only the integers: $a(t), \Z \mapsto \R$
+    \item $a_[n]=a_{CT}(nT_s)$ discrete to continuous
+    \item Compute delay between receiver and beacon in terms of samples and map make to continuous time using the time period (inverse of frequency)
+    \item $y'[n]=y[n-k]$ implies that $y'$ shifts $y$ to the right by $k$ discrete time samples ($k$ sample delay)
+\end{itemize}
+\begin{mdframed}
+\textbf{Signal Delay Linear Algebra:}
+\begin{itemize}
+    \item Stack all values of discrete time signals into a vector
+    \item Account for delay by cyclicly shifting down
+    \item Use a Circulant Matrix to do the cyclic shift
+    \item Example:
+    \begin{itemize}
+        \item Let $y =$ signal received, $a,b,c$ = signal from beacons a,b,c
+        \item Let $S^{N_k}$ Circulant Matrices that represent delay from beacon $k$ to receiver
+        \item Each signal has an attenuation coeff. (not in scope of class)
+        \item $y = \alpha S^{N_A}a + \beta S^{N_B}b + \gamma S^{N_C}c$
+        \item Find ${N_A},{N_B},{N_C} \rightarrow \x{delay}_A,\x{delay}_B,\x{delay}_C \rightarrow \x{distance}_A,\x{distance}_B,\x{distance}_C$
+        \item Want all $S^{N_k}k$ to be nearly mutually orthogonal
+        \item Orthogonal vectors have dot product of 0
+    \end{itemize}
+\end{itemize}
+\end{mdframed}
+\textbf{Orthogonality}
+\begin{itemize}
+    \item To measure 'similarity' of vectors, use dot products $\rightarrow$ inner product
+    \item Inner product: $\langle\vec{x},\vec{y}\rangle=x^Ty^*$
+    \item $y^*$: complex conjugate of $y$
+    \item Complex conjugate of $a+ib = a-ib$ where $i = \sqrt{-1}$
+    \item Complex values not in scope of class, so inner product = dot product for non-complex vectors
+    \item Dot product: $x \cdot y=x^Ty$
+\end{itemize}
+\end{document}

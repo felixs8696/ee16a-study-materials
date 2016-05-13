@@ -1,0 +1,132 @@
+\documentclass{article}\usepackage{amsmath,amssymb,amsthm,tikz,tkz-graph,color,chngpage,soul,hyperref,csquotes,graphicx,floatrow,framed,scrextend,mathtools,mathrsfs,setspace}\newcommand*{\QEDB}{\hfill\ensuremath{\square}}\newtheorem*{prop}{Proposition}\renewcommand{\theenumi}{\alph{enumi}}\usepackage[shortlabels]{enumitem}\usepackage[nobreak=true]{mdframed}\usetikzlibrary{matrix,calc}\MakeOuterQuote{"}\usepackage[margin=0.75in]{geometry} \newtheorem{theorem}{Theorem}\newcommand{\Z}{\mathbb Z}\newcommand{\R}{\mathbb R}\newcommand{\Q}{\mathbb Q}\newcommand{\N}{\mathbb N}\newcommand{\x}[1]{\textrm{#1}}\newcommand{\xs}[1]{\textrm{ #1 }}\newcommand{\pr}{\textrm{Pr}}
+\newcommand{\dincludegraphics}{\includegraphics[width=0.5\textwidth]}
+\newcommand{\tincludegraphics}{\includegraphics[width=0.33\textwidth]}
+\newcommand{\sumlim}[3]{\sum\limits_{#1}^{#2}#3}
+\newcommand{\eq}[1]{\begin{equation}#1\end{equation}}
+\newcommand{\w}{\omega}\newcommand{\Om}{\Omega}
+\newcommand{\set}[1]{\{#1\}}
+\newcommand{\scr}[1]{\mathscr{#1}}
+\renewenvironment{leftbar}[2][\hsize]
+{
+    \def\FrameCommand
+    {
+        {\color{#2}\vrule width 3pt}
+        \hspace{0pt}
+    }
+    \MakeFramed{\hsize#1\advance\hsize-\width\FrameRestore}
+}
+{\endMakeFramed}
+\newcommand{\easy}[2]{\begin{leftbar}{#1}#2\end{leftbar}}
+\newcommand{\eqs}[1]{\begin{mdframed}#1\end{mdframed}}
+\newcommand{\simple}[1]{\easy{gray}{\begin{enumerate}[1.]#1\end{enumerate}}}
+\newcommand{\inprod}[2]{\langle #1, #2\rangle}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\newcommand{\items}[1]{\begin{itemize}#1\end{itemize}}
+\newcommand{\bmatl}[1]{\begin{bmatrix*}[l]#1\end{bmatrix*}}
+\newcommand{\bmat}[1]{\begin{bmatrix*}[r]#1\end{bmatrix*}}
+\newcommand{\bmatc}[1]{\begin{bmatrix*}[c]#1\end{bmatrix*}}
+\newcommand{\ds}{\doublespacing}
+\newcommand{\e}{\varepsilon}
+\newcommand{\la}{\lambda}
+\newcommand{\n}[1]{\x{Null}(#1)}
+\newmdenv[topline=false, rightline=false, bottomline=false,%
+  linewidth=3pt, innerrightmargin=0pt, leftmargin=4pt,%
+  innerleftmargin=5pt, skipabove=5pt, skipbelow=5pt]{mdleftbar}
+\newcommand{\example}[2]{\textbf{Example: }\\#1\begin{mdleftbar}\onehalfspacing{#2}\end{mdleftbar}}
+\usetikzlibrary{arrows, automata}
+\newcommand{\dtikz}[1]{
+\begin{center}
+\begin{tikzpicture}[> = stealth, shorten > = 1pt, auto, node distance = 2.5cm,semithick]
+\tikzstyle{every state}=[draw = black,thick,fill = white,minimum size = 4mm]
+#1
+\end{tikzpicture}
+\end{center}
+}
+\newcommand{\ninfty}{n\rightarrow\infty}
+
+\title{EE16A - Lecture 25 Notes}
+\author{Name: Felix Su$\quad$SID: 25794773}
+\date{Spring 2016$\quad$GSI: Ena Hariyoshi}
+\begin{document}
+\maketitle
+
+%%%% Topic %%%%
+\subsection*{Pagerank}
+%%%% Notes %%%%
+\simple{
+    \item Webpages represented by nodes, linked to each other
+    \item Normalize Link Weights: ($\frac{\x{Node Score}}{\x{Out-Degree}}$)
+    \item State at time $n+1=\vec{s}[n+1]=A\vec{s}[n]$ where $A$ is the \textbf{transition matrix} and $\vec{s}$ is the \textbf{state vector}
+    \item $A$ is a Markov Matrix
+    \items{
+        \item All entries in $A$ are non-negative
+        \item Each column of $A$ sums to 1
+    }
+}
+\items{
+    \item Normalize outdegrees of each node, by dividing the weight of the node by the total number of out-links from that node (Node Score/Out-Degree)
+    \items{
+        \item Node $j$ has $n_j$ out links
+        \item Weight due to that node would be $\frac{x_j}{n_j}$ where $x$ = node's score
+        \item Node $j$'s contribution to node $k$'s score, to which it has a link, is $\frac{x_j}{n_j}$
+    }
+    \item $A\vec{s}*\vec{s}*=1I\vec{s}*\implies 1I\vec{s}*-A\vec{s}*=0 \implies (I-A)\vec{s}*=0$
+    \item $\vec{s}*$ is non-zero and $(I-A)\vec{s}*=0$, so $\vec{s}*\in \n{(I-A)}$
+    \items{
+        \item $\n{(I-A)}$ is non-trivial ($(I-A)$ does not have an empty null space) $\implies (I-A)$ does not have full rank
+    }
+}
+\eqs{
+\textbf{Simple Pagerank Example:}
+\dtikz{
+\node[state] (b) {2};
+\node[state] (a) [right of=b]  {1};
+\node[state] (c) [right of=a]  {3};
+\draw[->] (a) edge[bend left] node {$\frac{1}{2}$} (b);
+\draw[->] (a) edge[bend left] node {$\frac{1}{2}$} (c);
+\draw[->] (b) edge[bend left] node {1} (a);
+\draw[->] (c) edge[bend left] node {1} (a);
+}
+\eq{\vec{s}[n+1]=A\vec{s}[n]=\bmat{0&1&1\\1/2&0&0\\1/2&0&0}\vec{s}[n]}
+\textbf{Distribution approaches $\vec{s}*$ s.t.:}
+\eq{\vec{s}*=A\vec{s}*}
+\textbf{From $(I-A)\vec{s}*=0$}
+\eq{I-A=\bmat{1-0&-1&-1\\-1/2&1-0&0\\-1/2&0&1-0}=\bmat{1&-1&-1\\-1/2&1&0\\-1/2&0&1}}
+\textbf{Eigenvalue representation of $\vec{s}*=A\vec{s}*$ for $\la=1$}
+\eq{A\vec{v}_1=\la\vec{v}_1=\vec{v}_1}
+}
+\subsection*{Eigenvalues and Eigenvectors}
+\simple{
+    \item \textbf{Concept:} Transition matrix scales $\vec{v}_1$ in its original direction by a factor of $\la$
+    \item Every transition matrix $A$ will have $\la=1$ as an eigenvalue and a non-negative vector $\vec{v}_1$ associated with that eigenvalue, where the entries of that eigenvector sum to 1.
+    \item Eigenvector $\vec{v}_n$ associated with eigenvalue $\la_n$ is the vector that solves $(I-A)\vec{v}_n=0$
+}
+\items{
+    \item Solution to $\vec{s}[n+1]=A\vec{s}[n]$
+    \items{
+        \item Need Initial State vector $\vec{s}[0]$
+    }
+    \item General Solution: $\vec{s}[n]=\alpha_1\la_1^n\vec{v}_1+\alpha_2\la_2^n\vec{v}_2$
+    \items{
+        \item Linear combination of eigenvalues and eigenvectors
+        \item $\vec{s}[n+1]=\alpha_1\la_1^{n+1}\vec{v}_1+\alpha_2\la_2^{n+1}\vec{v}_2$
+        \item $A\vec{s}[n]=A(\alpha_1\la_1^n\vec{v}_1+\alpha_2\la_2^n\vec{v}_2)=\alpha_1\la_1^nA\vec{v}_1+\alpha_2\la_2^nA\vec{v}_2=\alpha_1\la_1^n\la_1\vec{v}_1+\alpha_2\la_2^n\la_2\vec{v}_2$
+        \item $=\alpha_1\la_1^{n+1}\vec{v}_1+\alpha_2\la_2^{n+1}\vec{v}_2=\vec{s}[n+1]$
+    }
+    \item Find $\alpha_1$ and $\alpha_2$
+    \items{
+        \item $\vec{s}[0]=\alpha_1\vec{v}_1+\alpha_2\vec{v}_2=\bmat{\vec{v}_1&\vec{v}_2}\bmat{\alpha_1\\\alpha_2}=\bmat{\vec{s}_1[0]\\\vec{s}_2[0]}$
+    }
+    \item To find the Limiting State Distribution, investigate the linear combination of the eigenvectore and eigenvalues as $\ninfty$
+    \items{
+        \item $\la_2^n\rightarrow 0$ as $\ninfty$
+        \item $\la_1^n=1 \forall n$
+        \item $\lim_{\ninfty}\vec{s}[n]=\alpha_1\la_1^n\vec{v}_1=\alpha\vec{v}_1$
+    }
+}
+\eqs{
+\textbf{Distribution Vector at State $n$}
+\eq{\vec{s}[n]=A^n\vec{s}[0]}
+}
+\end{document}

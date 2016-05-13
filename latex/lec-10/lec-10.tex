@@ -1,0 +1,46 @@
+\documentclass{article}\usepackage{amsmath,amssymb,amsthm,tikz,tkz-graph,color,chngpage,soul,hyperref,csquotes,graphicx,floatrow}\newcommand*{\QEDB}{\hfill\ensuremath{\square}}\newtheorem*{prop}{Proposition}\renewcommand{\theenumi}{\alph{enumi}}\usepackage[shortlabels]{enumitem}\usepackage[nobreak=true]{mdframed}\usetikzlibrary{matrix,calc}\MakeOuterQuote{"}\usepackage[margin=0.75in]{geometry} \newtheorem{theorem}{Theorem}
+
+\title{EE16A - Lecture 10 Notes}
+\author{Name: Felix Su$\quad$SID: 25794773}
+\date{Spring 2016$\quad$GSI: Ena Hariyoshi}
+\begin{document}
+\maketitle
+
+%%%% Topic %%%%
+\subsection*{Circuit Properties}
+%%%% Notes %%%%
+\begin{itemize}
+\item Voltage: Energy spent per unit charge to move some charge from point A to point B.\\
+    \begin{equation}V_{volts} = \frac{E_{joules}}{Q_{coulombs}}\end{equation}
+\item Current: The change in charge per unit time\\
+    \begin{equation}I_{amps} = \frac{dQ}{dt_{sec}}\end{equation}
+\item Resistor: Conductor that converts energy to heat (dissipates energy). Therefore, it causes current to always flow into the plus side of the voltage across the resistor.
+\end{itemize}
+\begin{mdframed}
+\textbf{Kirchoff's Voltage Law (KVL)}:\\
+The directed sum of potential differences (V) in a closed circuit must = 0
+\end{mdframed}
+\begin{mdframed}
+\textbf{Kirchoff's Current Law (KCL)}:\\
+The amount of current entering a point must = the amount of current exiting that point
+\end{mdframed}
+\begin{mdframed}
+\textbf{Ohm's Law}:\\
+The amount of current entering a point must = the amount of current exiting that point\\
+    $$V_{volts} = \frac{I_{Amps}}{R_{Ohms}}$$
+\end{mdframed}
+\begin{mdframed}
+\textbf{Resistance}:\\
+    Resistance = Resistivity * Length/Cross-sectional-area\\
+    $$R = \rho \cdot \frac{L_{cm}}{A_{cm^2}}$$
+\end{mdframed}
+%%%% Topic %%%%
+\subsection*{2D Touch Screen}
+%%%% Notes %%%%
+\begin{itemize}
+\item Need Voltage (V), Current (I), Resistance (R)
+\item Calculate resistance of full touch screen $R = \rho \cdot \frac{L}{A}$)
+\item Get Current: $I = \frac{V}{R}$
+\item Voltage Divider: $V = \frac{L_1}{L_2}V$
+\end{itemize}
+\end{document}

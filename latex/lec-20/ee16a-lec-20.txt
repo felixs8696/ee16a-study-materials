@@ -1,0 +1,29 @@
+%%%% Topic %%%%
+\subsection*{Positioning}
+%%%% Notes %%%%
+\textbf{Time of Flight}
+\begin{itemize}
+    \item Beacon sends signal of certain shape with signal a(t) at time t
+    \item Receiver gets signal of same general shape y(t) some time later
+    \item ToF = time it takes from signal sent to signal received
+    \item Derive distance using $d=v\Delta t$
+    \item Convert continuous time signal to a discrete time signal (with sampling period of $T_s=sec/sample$) where $a_{DT}[n]=a_{CT}(NT_s)$ and the sampling frequency is $f_s=\frac{1}{T_s}=Hz (cycles/sec)$
+\end{itemize}
+\textbf{Discrete Time Delay}
+\begin{itemize}
+    \item Receive delayed version of original signal $a[n]$ (discrete time): $y[n]=\alpha a[n-N_a]$ where delay is $N_a$
+    \item Delay is $N_a$ samples so get delay time $\Delta t$ by multiplying by period $T_s$ ($\Delta t = N_a T_s$)
+    \item It follows that the distance: $d = v\Delta t = v N_aT_s$
+\end{itemize}
+\textbf{Periodic Signals}
+\begin{itemize}
+    \item Beacon signal $a$ is periodic w/ period $N$ ($N$-periodic) ($a[n-N]=a[n], \forall n \in \Z$) 
+    \item If $y[n]=\alpha a[n-N_A]$,  $y$ is also $N-periodic$ because shifting does not change periodicity (circular shift)
+\end{itemize}
+\begin{mdframed}
+\textbf{Circular Shift:}\\
+\eq{a[n]=\begin{bmatrix}a_0\\a_1\\a_2\end{bmatrix}, a[n-1]=\begin{bmatrix}a_2\\a_0\\a_1\end{bmatrix}}
+\textbf{Shift Matrix}:
+\eq{S=\begin{bmatrix}0&0&1\\1&0&0\\0&1&0\end{bmatrix}, a[n-1]=Sa[n]}
+\end{mdframed}
+\end{document}

@@ -1,0 +1,147 @@
+\documentclass{article}\usepackage{amsmath,amssymb,amsthm,tikz,tkz-graph,color,chngpage,soul,hyperref,csquotes,graphicx,floatrow,framed,scrextend,mathtools,mathrsfs}\newcommand*{\QEDB}{\hfill\ensuremath{\square}}\newtheorem*{prop}{Proposition}\renewcommand{\theenumi}{\alph{enumi}}\usepackage[shortlabels]{enumitem}\usepackage[nobreak=true]{mdframed}\usetikzlibrary{matrix,calc}\MakeOuterQuote{"}\usepackage[margin=0.75in]{geometry} \newtheorem{theorem}{Theorem}\newcommand{\Z}{\mathbb Z}\newcommand{\R}{\mathbb R}\newcommand{\Q}{\mathbb Q}\newcommand{\N}{\mathbb N}\newcommand{\x}[1]{\textrm{#1}}\newcommand{\xs}[1]{\textrm{ #1 }}\newcommand{\pr}{\textrm{Pr}}
+\newcommand{\dincludegraphics}{\includegraphics[width=0.5\textwidth]}
+\newcommand{\tincludegraphics}{\includegraphics[width=0.33\textwidth]}
+\newcommand{\sumlim}[3]{\sum\limits_{#1}^{#2}#3}
+\newcommand{\eq}[1]{\begin{equation}#1\end{equation}}
+\newcommand{\w}{\omega}\newcommand{\Om}{\Omega}
+\newcommand{\set}[1]{\{#1\}}
+\newcommand{\scr}[1]{\mathscr{#1}}
+\renewenvironment{leftbar}[2][\hsize]
+{
+    \def\FrameCommand
+    {
+        {\color{#2}\vrule width 3pt}
+        \hspace{0pt}
+    }
+    \MakeFramed{\hsize#1\advance\hsize-\width\FrameRestore}
+}
+{\endMakeFramed}
+\newcommand{\easy}[2]{\begin{leftbar}{#1}#2\end{leftbar}}
+\newcommand{\eqs}[1]{\begin{mdframed}#1\end{mdframed}}
+\newcommand{\simple}[1]{\easy{gray}{\begin{enumerate}[1.]#1\end{enumerate}}}
+\newcommand{\inprod}[2]{\langle #1, #2\rangle}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\newcommand{\items}[1]{\begin{itemize}#1\end{itemize}}
+\newcommand{\bmat}[1]{\begin{bmatrix}#1\end{bmatrix}}
+\newcommand{\ds}{\doublespacing}
+
+\title{EE16A - Lecture 21 Notes}
+\author{Name: Felix Su$\quad$SID: 25794773}
+\date{Spring 2016$\quad$GSI: Ena Hariyoshi}
+\begin{document}
+\maketitle
+
+%%%% Topic %%%%
+\subsection*{Determine Distance from Beacon}
+%%%% Notes %%%%
+\simple{
+    \item Sent signal (periodic) = $a[n]=a[n+N], \forall n \in \Z$
+    \item Received signal (Time delayed) = $y[n]=\alpha a[n-N_A]$
+    \item Find time delay $N_A$ by finding the maximum inner product of each shifted version of the original signal and the received signal ($max(|\inprod{S^ka}{y}|), k=1,\cdots,N$) where resulting $k=N_A$
+    \item Determine distance ($d_A$) using time delay $N_A$ and given speed of wave signal
+    \item \textbf{Note:} When doing inner products to get correct shifts $S^k, k=\x{shift}$, you want everything to be as close as possible to mutually orthogonal with shifted version, so only the inner product of the original signal with itself will be large (peak) and everything else will be noticably smaller
+}
+\items{
+    \item Beacon A sends periodic signal with period $N$ ($a[n]=a[n+N], \forall n \in \Z$)
+    \item Receive attenuated/timed delayed version of the sent signal
+    \items{\item Goal: Figure out time delay and derive distance using the given speed of the wave being emitted}
+    \item Need 3 beacons to pinpoint one point on a 2D plane
+    \item Find $d_A, d_B, d_C$ from signals $A,B,C$ which are all $N-periodic$
+    \item Receiver gets some linear combination the 3 signals ($y[n]=\alpha a[n-N_A]+\beta b[n-N_B]+ \gamma c[n-N_C]=\alpha S^{N_A}a+ \beta S^{N_B}b+ \gamma S^{N_C}c$)
+    \item Linear waves: Superposition principles applies (Electromagnetic and acoustic waves are approx. linear)
+    \item Determine $N_A,N_B,N_C \rightarrow d_A,d_B,d_C,$ by using $max(\inprod{S^ka}{y}), k=1,\cdots,N$ 
+}
+\eqs{
+\textbf{Vector Model of a Signal Period:}
+\eq{y=\bmat{y[n]\\\vdots\\y[N-1]}}
+}
+%%%% Topic %%%%
+\subsection*{Triangulation}
+%%%% Notes %%%%
+\simple{
+    \item When subtracting vectors, arrow point towards "positive" value
+    \item \textbf{Minimizing Error}: Find $x$ s.t. $\norm{\varepsilon}^2$ is minimized where $\varepsilon = b-Ax$ (Result data we receive $Ax=b-\varepsilon$)
+    \item $\varepsilon \bot a_1$ \& $\varepsilon \bot a_2$: $\varepsilon$ has to be orthogonal to each of the columns of the $A$ matrix
+}
+\items{
+    \item Retrieve position after distances from each beacon received
+    \item $\norm{a_n-x}^2=\inprod{a_n-x}{a_n-x}=\inprod{a_n}{a_n}-2\inprod{a_n}{x}+\inprod{x}{x}=\norm{a}^2+2\inprod{a_n}{x}+\norm{x}^2=d_n^2$
+    \item For 3-beacon system, subtract $d_2$ and $d_3$ from $d_1$:
+    \begin{itemize}[*]
+        \item $2\inprod{a_2}{x}-2\inprod{a_1}{x}=2\inprod{a_2-a_1}{x}=d_1^2-d_2^2+\norm{a_2}^2-\norm{a_1}^2$
+        \item $2\inprod{a_3}{x}-2\inprod{a_1}{x}=2\inprod{a_3-a_1}{x}=d_1^2-d_3^2+\norm{a_3}^2-\norm{a_1}^2$
+    \end{itemize}
+    \item Matrix multiplication and solve for $b_1,b_2$
+    \items{
+        \item $Ax=b$ has a unique soln. if $a_2^T-a_1^T$ and $a_3^T-a_1^T$ are lin. independent
+        \item As long as the three beacons are not co-linear, the above will be lin. ind.
+        \item Use more beacons to do pairwise subtractions and account for error. This will just make $A$ an $n\times 2$ matrix, and we will get $b \in \R^n$
+    }
+    \item \textbf{Problem:} $b \not\in $ span of cols of $A$ because there is error in the signals.
+    \items{
+        \item $Ax=b$ has no exact soln.
+        \item $b$ is some vector outside the subspace of $x_1A_1+x_2A_2$ (outside of the plane formed by the two vectors of $A$)
+        \item Error $\varepsilon=b-Ax$
+        \item Find $x$ s.t. $\norm{\varepsilon}^2$ is minimized
+        \item $Ax=a_1x_1+a_2x_2$, which is a line between the two vectors ($a_1,a_2$).
+        \item Choose point on $Ax$ that creates a perpendicular line from that point to $b$ in order to get the smallest $\varepsilon$
+        \item $\varepsilon$ is perpendicular to the plane of the subspace between $a_1,a_2$
+    }
+}
+\eqs{
+    \textbf{Matrix Multiplication Step for Triangulation}
+    \eq{\bmat{2(a_2^T-a_1^T)\\2(a_3^T-a_1^T)}x=\bmat{b_1\\b_2}}
+}
+%%%% Topic %%%%
+\subsection*{Basic Projection Problem}
+%%%% Notes %%%%
+\simple{
+    \item $\inprod{\vec{a}}{\varepsilon=b-\vec{a}x}=0$, Solve for $x$
+    \item Best estimate for $\vec{b}$ in the least square error sense is $\hat{b}=\vec{a}x-\frac{\vec{a}^T\vec{b}}{\vec{a}^Ta}\vec{a}$
+}
+\items{
+    \item Have one dimensional vector $\vec{a}$ and $\vec{b}$ outside of the subspace.
+    \item Want to get value $x$ on $\vec{a}$ s.t. $\varepsilon=b-\vec{a}x$ is minimized.
+    \items{
+        \item Optimal $x$ makes $\varepsilon$ orthogonal to $\vec{a}$
+        \item $\varepsilon \bot a \implies \inprod{\vec{a}}{\varepsilon}=0 \implies \inprod{\vec{a}}{b-\vec{a}{x}}=0$
+    }
+    \item Solve for $x$:
+    \items{
+        \item $\inprod{\vec{a}}{\vec{b}}-\inprod{\vec{a}}{\vec{a}x}=0$
+        \item $\inprod{\vec{a}}{\vec{b}}-x\inprod{\vec{a}}{\vec{a}}=0$
+        \item $x=\frac{\inprod{\vec{a}}{\vec{b}}}{\inprod{\vec{a}}{\vec{a}}}=\frac{\vec{a}^T\vec{b}}{\vec{a}^Ta}$
+    }
+    \item Best estimate for $\vec{b}$ in the least square error sense is $\hat{b}=\vec{a}x-\frac{\vec{a}^T\vec{b}}{\vec{a}^Ta}\vec{a}$
+    \item Can derive Cauchy-Schwarz from $\norm{\varepsilon}=\norm{\vec{b}-\hat{b}}^2\ge0$
+}
+\eqs{
+\textbf{Cauchy-Schwarz Inequality}
+\eq{\abs{\inprod{\vec{a}}{\vec{b}}}\le\norm{\vec{a}}\norm{\vec{b}}}
+}
+%%%% Topic %%%%
+\subsection*{Multi-Dimension Projection Problem}
+%%%% Notes %%%%
+\simple{
+    \item $x=(A^TA)^{-1}A^Tb$
+}
+\items{
+    \item $A_{n\times m}x_{m\times1}=b_{n\times1}$
+    \item Let $A = \bmat{a_1&a_2}$
+    \item Optimal $x$ makes $\varepsilon$ orthogonal to each $a_n$ (column vec) of $A$
+    \items{
+        \item $\varepsilon \bot a_n \implies \inprod{\vec{a_n}}{\varepsilon}=\inprod{\vec{a_n}}{b-Ax}=\vec{a_n}^T(\vec{b}-Ax)=0$
+    }
+    \item Solve for $x$: $A^T(\vec{b}-Ax)=0$
+    \items{
+        \item $A^T(\vec{b}-Ax)=0\implies A^Tb-A^TAx=0\implies A^TAx=A^Tb$
+        \item $A^TA$ is invertible iff $A$ has full column rank (lin. indep. columns) 
+        \item $x=(A^TA)^{-1}A^Tb$
+    }
+}
+\eqs{
+\textbf{Solve for $x$:}
+\eq{\bmat{\vec{a_1}^T\\\vdots\\\vec{a_n}^T}(\vec{b}-Ax)=0}
+}
+\end{document}

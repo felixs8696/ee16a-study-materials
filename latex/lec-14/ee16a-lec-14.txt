@@ -1,0 +1,39 @@
+Capacitor touch screen
+Variable capacitance: determines if finger touched
+    1. Charge variable capacitor to a fixed voltage
+    2. Because Q = CV, capacitance varies and voltage is now fixed, charge Q now varies.
+    3. Move Q onto another fixed capacitor
+    4. Because V = Q/C, determines the varying voltage
+
+Switch Diagrams:
+Analyze each phase of the diagram with one switched as ideal wires and off switches as open circuits
+    Capacitors have no resistance in the scope of this class
+    Total charge is conserved between switch phases
+
+Charge Sharing:
+Phase 1: Accumulate charge on variable capacitor
+Phase 2: Distribute charge between variable and fixed capacitor evenly through parallel
+Calculate total charge in Phase 1 (fixed C should be 0, var C should be Q)
+Calculate total charge in Phase 2 in terms of V out (Q fixed = C_fixed V_out, Q_var = C_var V_out)
+Equate two charge and solve for V_out
+
+If you attach a resistor to parallel capacitors, it will dissipate all energy in capacitors across the resistor very quickly (capacitors discharge)
+
+New component (op amp acts as a buffer):
+    1. Take analog voltage created by switch/capacitor system, and force it to be either 0V or 5V
+    2. Want this to act as an open circuit with infinite resistance (no voltage drop/current)
+
+Op-Amp: 
+Example derivation (1:05:28)
+Triangle with 5 terminals (V+, V-, Vout, VDD, VSS)
+Equivalent to dependent voltage source (value depends on another voltage in circuit measured) that measures voltage between V+ and V- (open circuit), and produces a voltage = A x (V+-V-) = Vout
+Needs to be connected to 2 power sources (VPP, VNN)
+A ideally infinite scale factor, which would cause infinite Vout, but you cannot produce a Vout outside of the range of VDD (VPP) - VSS (VNN) (Vout min = VSS, Vout max = VDD})
+
+Capacitor Touch Screen:
+Want V_out to be 5V on touch, and 0V on no touch
+Connect Charge sharing parallel capacitors to Op-Amp:
+    • V_var (V_ana) = V+, Vref = V-, V_DD = 5V, V_SS = ground (0)
+    • Choose V_ref and C_fixed s.t. V_ana > V_ref on touch, and V_ana < V_ref when not touching
+    • C_notouch is eA/d : 1 capacitor between E_1, E2
+    • C_touch is C_notouch + (C_fin, E_1)||(C_fin, E_2) : (Cadds two more capacitors in parallel (C_fin, E_1)(C_fin,  E_2)

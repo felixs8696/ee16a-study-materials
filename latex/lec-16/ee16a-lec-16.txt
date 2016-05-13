@@ -1,0 +1,35 @@
+Negative Feedback Loop (V- is negative):
+    Eq Derivation at 27:34
+    V_err = V_in-V_fb
+    V_fb unchanged, A > 0, f > 0: V_in increases -> V_err increases -> V_out increases -> V_fb increases -> V_err decreases... V_in stabilizes
+    Eq 1. V_out = AV+/1+Af
+        Use resistors to determine f, which in turn determines the scaling factor of V_out/V_in
+        V_out scales V_in by a factor of A/1+Af
+        V- = V_fb = f V_out = f A V+/1+Af (approaches 1 as A -> infty)
+    V_out approaches V+/f as A -> infty
+        Amps does not have to be very precise, just very large
+    Changes to V_in should cause V_err to decrease (V_fb increases in V_in increases and decreases if V_in decreases)
+
+Positive Feedback Loop (V- is positive):
+    V_in continuously increases (V+ is positive): V_out hits max rail
+    V_in continuously decreases (V- is negative): V_out hits min rail
+
+Determining Negative Feedback Exists:
+GR 1. I- = 0, so analyze circuit between V_out and V_fb
+V_fb = R_2V_out/R_1R_2 : f = R_2/R_1R_2
+Negative feedback exists
+
+Analyzing complex OpAmp Circuits:
+    Use GR 1 to locate open circuits (I=0)
+    Split OpAmps by open circuits and V_out
+    Determine if negative feedback loop exists (V_fb increases in V_in increases and decreases if V_in decreases) (If positive feedback loop exists, V_out will hit the rails)
+    Apply GR 2 with KCL to determine current flows
+    Analyze individual voltage drops across each resistor from V_in to V_fb to V_out : get V_out
+
+Example OA2 : inverting amplifier
+    Inverts the sign and is determined by the ratio of the two resistors
+    V_fb =  -R_2 V_out/R_1
+
+Find Polarity of OpAmp:
+Polarity of inverse amplifier should be the opposite sign of the disturbance
+    If V^+ is inserted as positive, the polarity of OpAmp must be negative to generate a proper negative feedback

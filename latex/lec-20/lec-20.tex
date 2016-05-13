@@ -1,0 +1,151 @@
+\documentclass{article}\usepackage{amsmath,amssymb,amsthm,tikz,tkz-graph,color,chngpage,soul,hyperref,csquotes,graphicx,floatrow,framed,scrextend,mathtools,mathrsfs}\newcommand*{\QEDB}{\hfill\ensuremath{\square}}\newtheorem*{prop}{Proposition}\renewcommand{\theenumi}{\alph{enumi}}\usepackage[shortlabels]{enumitem}\usepackage[nobreak=true]{mdframed}\usetikzlibrary{matrix,calc}\MakeOuterQuote{"}\usepackage[margin=0.75in]{geometry} \newtheorem{theorem}{Theorem}\newcommand{\Z}{\mathbb Z}\newcommand{\R}{\mathbb R}\newcommand{\Q}{\mathbb Q}\newcommand{\N}{\mathbb N}\newcommand{\x}[1]{\textrm{#1}}\newcommand{\xs}[1]{\textrm{ #1 }}\newcommand{\pr}{\textrm{Pr}}
+\newcommand{\dincludegraphics}{\includegraphics[width=0.5\textwidth]}
+\newcommand{\tincludegraphics}{\includegraphics[width=0.33\textwidth]}
+\newcommand{\sumlim}[3]{\sum\limits_{#1}^{#2}#3}
+\newcommand{\eq}[1]{\begin{equation}#1\end{equation}}
+\newcommand{\w}{\omega}\newcommand{\Om}{\Omega}
+\newcommand{\set}[1]{\{#1\}}
+\newcommand{\scr}[1]{\mathscr{#1}}
+\renewenvironment{leftbar}[2][\hsize]
+{
+    \def\FrameCommand
+    {
+        {\color{#2}\vrule width 3pt}
+        \hspace{0pt}
+    }
+    \MakeFramed{\hsize#1\advance\hsize-\width\FrameRestore}
+}
+{\endMakeFramed}
+\newcommand{\easy}[2]{\begin{leftbar}{#1}#2\end{leftbar}}
+\newcommand{\eqs}[1]{\begin{mdframed}#1\end{mdframed}}
+\newcommand{\simple}[1]{\easy{gray}{#1}}
+\newcommand{\inprod}[2]{\langle #1, #2\rangle}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+
+\title{EE16A - Lecture 20 Notes}
+\author{Name: Felix Su$\quad$SID: 25794773}
+\date{Spring 2016$\quad$GSI: Ena Hariyoshi}
+\begin{document}
+\maketitle
+
+%%%% Topic %%%%
+\subsection*{Positioning}
+%%%% Notes %%%%
+\textbf{Time of Flight}
+\begin{itemize}
+    \item Beacon sends signal of certain shape with signal a(t) at time t
+    \item Receiver gets signal of same general shape y(t) some time later
+    \item ToF = time it takes from signal sent to signal received
+    \item Derive distance using $d=v\Delta t$
+    \item Convert continuous time signal to a discrete time signal (with sampling period of $T_s=sec/sample$) where $a_{DT}[n]=a_{CT}(NT_s)$ and the sampling frequency is $f_s=\frac{1}{T_s}=Hz (cycles/sec)$
+\end{itemize}
+\textbf{Discrete Time Delay}
+\simple{
+\begin{enumerate}[1.]
+    \item To find $N_a$, look at all possible shifts $S^ka$ where $k=0,1,\cdots,N-1$ and find the value of $k$ that gives the closest match between received signal and very shifted version of original signal $a$
+    \begin{itemize}
+        \item compare $y$ w/ $a, Sa, S^2a,\cdots, S^{N-1}a$
+    \end{itemize}
+    \item Compute $k$ that maximizes the absolute value of the inner product between $y$ and $S^ka$ (Max($|\inprod{y, S^ka}|$)
+        \item $k = N_a$ or the delay shift between the received and original signal
+\end{enumerate}
+}
+\begin{itemize}
+    \item Receive delayed version of original signal $a[n]$ (discrete time): $y[n]=\alpha a[n-N_a]$ where delay is $N_a$
+    \item Delay is $N_a$ samples so get delay time $\Delta t$ by multiplying by period $T_s$ ($\Delta t = N_a T_s$)
+    \item It follows that the distance: $d = v\Delta t = v N_aT_s$
+    \item Do not know $N_a$, so look at all possible shifts $S^ka$ where $k=0,1,\cdots,N-1$ and find the value of $k$ that gives the closest match between received signal and very shifted version of original signal $a$
+    \begin{itemize}
+        \item $y$ compare w/ $a, Sa, S^2a,\cdots, S^{N-1}a$
+        \item Compute $k$ that maximizes the absolute value of the inner product between $y$ and $S^ka$ (Max($|\inprod{y, S^ka}|$)
+        \item $k = N_a$ or the delay shift between the received and original signal (not perfect, but close)
+    \end{itemize}
+\end{itemize}
+\textbf{Periodic Signals}
+\begin{itemize}
+    \item Beacon signal $a$ is periodic w/ period $N$ ($N$-periodic) ($a[n-N]=a[n], \forall n \in \Z$) 
+    \item If $y[n]=\alpha a[n-N_A]$,  $y$ is also $N-periodic$ because shifting does not change periodicity (circular shift)
+\end{itemize}
+\begin{mdframed}
+\textbf{Circular Shift:}\\
+\eq{a[n]=\begin{bmatrix}a_0\\a_1\\a_2\end{bmatrix}, a[n-1]=\begin{bmatrix}a_2\\a_0\\a_1\end{bmatrix}}
+\textbf{Shift Matrix Example}:
+\eq{S=\begin{bmatrix}0&0&1\\1&0&0\\0&1&0\end{bmatrix}, a[n-1]=Sa[n]}
+\textbf{Shift Matrix General}:
+\eq{\begin{bmatrix}a_{N-1}\\a_0\\\vdots\\a_{N-2}\end{bmatrix}=\begin{bmatrix*}[c]0^T_{N-1}&1\\I_{N-1}&0_{N-1}\end{bmatrix*}\begin{bmatrix}a_0\\a_1\\\vdots\\a_{N-1}\end{bmatrix}}
+\textbf{Model Delay of Signal $a$ by Shift $N_a$}
+\eq{y=S^{N_A}a}
+\textbf{Circular Shift of $N$-periodic signl by $N$ samples $\implies I$}
+\eq{S^N=I}
+\textbf{Shift Transpose is its Inverse}
+\eq{S^T=S^{-1}}
+\end{mdframed}
+%%%% Topic %%%%
+\subsection*{Inner Product}
+%%%% Notes %%%%
+\simple{
+\begin{enumerate}[1.]
+    \item Scope of the class: Inner products are in $\R^n$, so $\inprod{x}{y}=x^Ty=x\cdot y$
+    \item Inner product = dot product
+\end{enumerate}
+}
+\begin{itemize}
+    \item Elements $x,y,z \in \scr{V}$ where $\scr{V} =$ vector space in $\R^n \xs{or} \mathbb{C}^n$
+    \item Inner product is a function that has a domain that is a pair of elements in vector space $\inprod{x}{y}: \scr{V}\times\scr{V}$ and maps these values from $\R^n \xs{or} \mathbb{C}^n$ to $\R \xs{or} \mathbb{C}$
+    \item In $\mathbb{C}^n, \inprod{x}{y}=x^Ty^*$
+    \item In $\R^n, \inprod{x}{y}=x^Ty=x\cdot y$
+\end{itemize}
+\begin{mdframed}
+\textbf{Inner Product Properties}\\
+\textbf{Hermitian/Conjugate Symmetry} (*=complex conjugate)
+\eq{\inprod{x}{y}=\inprod{y}{x^*}}
+\textbf{Symmetry/Commutativity} (If vector space $\in \R$)
+\eq{\inprod{x}{y}=\inprod{y}{x}}
+\textbf{Distributive}
+\eq{\inprod{x}{y+z}=\inprod{x}{y}+\inprod{x}{z}}
+\textbf{Scaling}
+\eq{\inprod{\alpha x}{y}=\alpha\inprod{x}{y}}
+\textbf{Non-negativity}
+\eq{\inprod{x}{x}\ge 0 \x{ w/ equality} \iff x=0} 
+\end{mdframed}
+%%%% Topic %%%%
+\subsection*{Norm}
+%%%% Notes %%%%
+\simple{
+\begin{enumerate}[1.]
+    \item 2-Norm Definition ($\norm{x}_2$)
+    \begin{itemize}
+        \item $\norm{x}=\sqrt{\inprod{x}{x}}$
+        \item $\norm{x}^2=\inprod{x}{x}$
+    \end{itemize}
+    \item Norm and inner product: $\inprod{a}{b}=\norm{a}\norm{b}\cos\theta$ where $\theta$ = angle between $a,b$
+    \item For comparison between signals, find shift that will maximize: $\cos\theta=\frac{\inprod{a}{b}}{\norm{a}\norm{b}}$
+    \item Norm = magnitude
+\end{enumerate}
+}
+\begin{itemize}
+    \item Gives sense of size to elements in vector space
+    \item Relationship with cosine of angle between vectors
+    \item Vector $a,b$ with angles w.r.t $x$-axis of $\alpha, \beta$ respectively
+    \item Angle between the vectors is $\theta$
+    \item $a=[a_1,a_2], b=[b_1,b_2]$
+    \item $a_1=\norm{a}\cos{\alpha}, a_2=\norm{a}\sin{\alpha}; b_1=\norm{b}\cos\beta, b_2=\norm{b}\sin\beta$
+    \item $\inprod{a}{b}=[a_1,a_2][b_1,b_2]^T=a_1b_1+a_2b_2=\norm{a}\cos\alpha\norm{b}\cos\beta+\norm{a}\sin\alpha\norm{b}\sin\beta$
+    \item $=\norm{a}\norm{b}(\cos\alpha\cos\beta+\sin\alpha\sin\beta)$
+    \item $=\norm{a}\norm{b}(\cos(\beta-\alpha)$ because ($\cos(\beta-\alpha)=\cos\alpha\cos\beta+\sin\alpha\sin\beta$)
+    \item $=\norm{a}\norm{b}\cos\theta$
+\end{itemize}
+\begin{mdframed}
+\textbf{Non-Negativity}
+\eq{\norm{x}\ge 0 \x{ w/ equality} \iff x= 0}
+\textbf{Scaling Property}
+\eq{\norm{\alpha x}=\abs{\alpha}\norm{x}}
+\textbf{Triangle Inequality}
+\eq{\norm{x+y}\le\norm{x}+\norm{y} \x{ w/ equality} \iff x=\alpha y, \alpha > 0}
+\textbf{Norm and Inner Product: }
+\eq{\inprod{a}{b}=\norm{a}\norm{b}\cos\theta \xs{where} \theta = \xs{angle between} a,b}
+\textbf{Angle between Cartesian Vectors}
+\eq{\cos\theta=\frac{\inprod{a}{b}}{\norm{a}\norm{b}}}
+\end{mdframed}
+\end{document}

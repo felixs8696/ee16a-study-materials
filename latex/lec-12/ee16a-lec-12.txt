@@ -1,0 +1,8 @@
+EE16A Lecture 12 Notes:
+Superposition: 
+1. For each (V-src, or I-src) k:
+    a. Set all other sources to 0
+        • V-src to short circuit (no voltage drop/increase)
+        • I-src to open circuit (no current)
+    b. Compute V-out due to source k
+2. Sum up all V-out_k 's for all k sources

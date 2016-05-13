@@ -1,0 +1,76 @@
+\documentclass{article}\usepackage{amsmath,amssymb,amsthm,tikz,tkz-graph,color,chngpage,soul,hyperref,csquotes,graphicx,floatrow}\newcommand*{\QEDB}{\hfill\ensuremath{\square}}\newtheorem*{prop}{Proposition}\renewcommand{\theenumi}{\alph{enumi}}\usepackage[shortlabels]{enumitem}\usepackage[nobreak=true]{mdframed}\usetikzlibrary{matrix,calc}\MakeOuterQuote{"}\usepackage[margin=0.75in]{geometry} \newtheorem{theorem}{Theorem}
+\newcommand{\dincludegraphics}{\includegraphics[width=0.5\textwidth]}
+\newcommand{\tincludegraphics}{\includegraphics[width=0.33\textwidth]}
+
+\title{EE16A - Lecture 16 Notes}
+\author{Name: Felix Su$\quad$SID: 25794773}
+\date{Spring 2016$\quad$GSI: Ena Hariyoshi}
+\begin{document}
+\maketitle
+
+%%%% Topic %%%%
+\subsection*{Negative Feedback Loop}
+%%%% Notes %%%%
+\begin{center}\dincludegraphics{nflscale}\end{center}
+\textbf{Usually $V^-$ is negative:}
+\begin{itemize}
+    \item $V_{err} = V_{in}-V_{fb}$
+    \item $V_{fb}$ unchanged, $A > 0$, $f > 0$: $V_{in}$ increases $\Rightarrow V_{err}$ increases $\Rightarrow V_{out}$ increases $\Rightarrow V_{fb}$ increases $\Rightarrow V_{err}$ decreases... $V_{in}$ stabilizes
+    \item Eq 1. $V_{out} = \frac{A}{1+Af}\cdot V^+$ : Derivation at 27:34
+    \begin{itemize}
+        \item Use resistors to determine $f$, which in turn determines the scaling factor of $\frac{V_{out}}{V_{in}}$
+        \item $V_{out}$ scales $V_{in}$ by a factor of $\frac{A}{1+Af}$
+        \item $V^- = V_{fb} = fV_{out} = \frac{fA}{1+Af}\cdot V^+$ (approaches $1$ as $A \rightarrow \infty$)
+    \end{itemize}
+    \item $V_{out}$ approaches $\frac{1}{f}\cdot V^+$ as $A \rightarrow \infty$ : Amps does not have to be very precise, just very large
+    \item \textbf{Changes to $V_{in}$ should cause $V_{err}$ to decrease ($V_{fb}$ increases if $V_{in}$ increases and decreases if $V_{in}$ decreases)}
+\end{itemize}
+\begin{mdframed}
+\textbf{NFL Equations}
+% \begin{itemize}
+    \begin{equation}V_{out} = \frac{A}{1+Af} \cdot V^+ ; \lim_{A \rightarrow \infty}V_{out} = \frac{1}{f}\cdot V^+\end{equation}
+    \begin{equation}V^- = \frac{fA}{1+Af}\cdot V^+ ; \lim_{A \rightarrow \infty}V^- = V^+\end{equation}
+% \end{itemize}
+\end{mdframed}
+%%%% Topic %%%%
+\subsection*{Positive Feedback Loop}
+%%%% Notes %%%%
+\textbf{Usually $V^-$ is positive:}
+\begin{itemize}
+    \item $V_{in}$ continuously increases ($V^+$ is positive): $V_{out}$ hits max rail
+    \item $V_{in}$ continuously decreases ($V^-$ is negative): $V_{out}$ hits min rail
+\end{itemize}
+%%%% Topic %%%%
+\subsection*{Determining if Negative Feedback Exists}
+%%%% Notes %%%%
+\begin{center}\dincludegraphics{detnfl}\end{center}
+\begin{enumerate}[1.]
+    \item GR 1. $I^- = 0$, so analyze circuit between $V_{out}$ and $V_{fb}$
+    \item $V_{fb} = \frac{R_2}{R_1R_2}V_{out}$ : $f = \frac{R_2}{R_1R_2}$
+    \item Negative feedback exists
+\end{enumerate}
+%%%% Topic %%%%
+\subsection*{Analyzing complex OpAmp Circuits}
+%%%% Notes %%%%
+\begin{center}\dincludegraphics{complexop}\end{center}
+\begin{itemize}
+    \item Use GR 1 to locate open circuits ($I = 0$)
+    \item Split OpAmps by open circuits and $V_{out}$
+    \item Determine if negative feedback loop exists (If positive feedback loop exists, $V_{out}$ will hit the rails)
+    \item Apply GR 2 with KCL to determine current flows
+    \item Analyze individual voltage drops across each resistor from $V_{in}$ to $V_{fb}$ to $V_{out}$ to get $V_{out}$
+\end{itemize}
+\begin{mdframed}
+\textbf{Example $OA_2$ : Inverting Amplifier}
+\begin{itemize}
+    \item Inverts the sign and is determined by the ratio of the two resistors
+    \item $V_{fb} =  -\frac{R_2}{R_1}\cdot V_{out}$
+\end{itemize}
+\end{mdframed}
+%%%% Topic %%%%
+\subsection*{Find Polarity of OpAmp}
+%%%% Notes %%%%
+\begin{itemize}
+    \item Polarity of inverse amplifier should be the opposite sign of the disturbance (If $V^+$ is inserted as positive, the polarity of OpAmp must be negative to generate a proper negative feedback)
+\end{itemize}
+\end{document}

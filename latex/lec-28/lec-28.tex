@@ -1,0 +1,162 @@
+\documentclass{article}\usepackage{amsmath,amssymb,amsthm,tikz,tkz-graph,color,chngpage,soul,hyperref,csquotes,graphicx,floatrow,framed,scrextend,mathtools,mathrsfs,setspace}\newcommand*{\QEDB}{\hfill\ensuremath{\square}}\newtheorem*{prop}{Proposition}\renewcommand{\theenumi}{\alph{enumi}}\usepackage[shortlabels]{enumitem}\usepackage[nobreak=true]{mdframed}\usetikzlibrary{matrix,calc}\MakeOuterQuote{"}\usepackage[margin=0.75in]{geometry} \newtheorem{theorem}{Theorem}\newcommand{\Z}{\mathbb Z}\newcommand{\R}{\mathbb R}\newcommand{\Q}{\mathbb Q}\newcommand{\N}{\mathbb N}\newcommand{\x}[1]{\textrm{#1}}\newcommand{\xs}[1]{\textrm{ #1 }}\newcommand{\pr}{\textrm{Pr}}
+\newcommand{\dincludegraphics}{\includegraphics[width=0.5\textwidth]}
+\newcommand{\tincludegraphics}{\includegraphics[width=0.33\textwidth]}
+\newcommand{\sumlim}[3]{\sum\limits_{#1}^{#2}#3}
+\newcommand{\eq}[1]{\begin{equation}#1\end{equation}}
+\newcommand{\w}{\omega}\newcommand{\Om}{\Omega}
+\newcommand{\set}[1]{\{#1\}}
+\newcommand{\scr}[1]{\mathscr{#1}}
+\renewenvironment{leftbar}[2][\hsize]
+{
+    \def\FrameCommand
+    {
+        {\color{#2}\vrule width 3pt}
+        \hspace{0pt}
+    }
+    \MakeFramed{\hsize#1\advance\hsize-\width\FrameRestore}
+}
+{\endMakeFramed}
+\newcommand{\easy}[2]{\begin{leftbar}{#1}#2\end{leftbar}}
+\newcommand{\eqs}[1]{\begin{mdframed}#1\end{mdframed}}
+\newcommand{\simple}[1]{\easy{gray}{\begin{enumerate}[1.]#1\end{enumerate}}}
+\newcommand{\inprod}[2]{\langle #1, #2\rangle}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\newcommand{\items}[1]{\begin{itemize}#1\end{itemize}}
+\newcommand{\bmatl}[1]{\begin{bmatrix*}[l]#1\end{bmatrix*}}
+\newcommand{\bmat}[1]{\begin{bmatrix*}[r]#1\end{bmatrix*}}
+\newcommand{\bmatc}[1]{\begin{bmatrix*}[c]#1\end{bmatrix*}}
+\newcommand{\ds}{\doublespacing}
+\newcommand{\e}{\varepsilon}
+\newcommand{\la}{\lambda}
+\newcommand{\n}[1]{\x{Null}(#1)}
+\newmdenv[topline=false, rightline=false, bottomline=false,%
+  linewidth=3pt, innerrightmargin=0pt, leftmargin=4pt,%
+  innerleftmargin=5pt, skipabove=5pt, skipbelow=5pt]{mdleftbar}
+\newcommand{\example}[2]{\textbf{Example: }\\#1\begin{mdleftbar}\onehalfspacing{#2}\end{mdleftbar}}
+\usetikzlibrary{arrows, automata}
+\newcommand{\dtikz}[1]{
+\begin{center}
+\begin{tikzpicture}[> = stealth, shorten > = 1pt, auto, node distance = 2.5cm,semithick]
+\tikzstyle{every state}=[draw = black,thick,fill = white,minimum size = 4mm]
+#1
+\end{tikzpicture}
+\end{center}
+}
+\newcommand{\ninfty}{n\rightarrow\infty}
+\newcommand{\La}{\Lambda}
+\newcommand{\limty}{\lim_{n\rightarrow\infty}}
+\newcommand{\dcol}[2]{\begin{minipage}{.5\linewidth}#1\end{minipage}\begin{minipage}{.5\linewidth}#2\end{minipage}}
+\newcommand{\dcoleq}[2]{\dcol{\begin{center}#1\end{center}}{\begin{center}#2\end{center}}}
+
+\title{EE16A - Lecture 28 Notes}
+\author{Name: Felix Su$\quad$SID: 25794773}
+\date{Spring 2016$\quad$GSI: Ena Hariyoshi}
+\begin{document}
+\maketitle
+
+%%%% Topic %%%%
+\subsection*{Decoupling State Space Equation}
+%%%% Notes %%%%
+\simple{
+    \item Summary
+}
+\items{
+    \item State Space equation (SSE): $\vec{s}[n+1]=A\vec{s}[n]$
+    \item $\vec{s}[n]=V\vec{q}[n]\implies \vec{s}[n+1]=V\vec{q}[n+1]$
+    \items{
+        \item SSE becomes $V\vec{q}[n+1]=AV\vec{q}[n]$
+        \item $A=V\La V^{-1}\implies V^{-1}AV=\La$
+        \item Premultiply by $V^{-1}\implies\vec{q}[n+1]=V^{-1}AV\vec{q}[n]$
+    }
+    \item So, you have a new equation: $\vec{q}[n+1]=\La \vec{q}[n]$
+    \item Good because:
+    \items{
+        \item Original SSE: $\vec{s}_k[n+1]=\bmatc{a_{k1}&a_{k2}&\cdots&a_{kN}}\bmatc{\vec{s}_1[n]&\vec{s}_2[n]&\cdots&\vec{s}_N[n]}^T=\sumlim{l=1}{N}{\vec{a}_{kl}\vec{s}_k[n]}$
+        \item Can't solve this independently of other state variables, because they are coupled and appear in the right hand side of the equation
+        \item Shift from $\vec{s}$ to $\vec{q}$ = decoupled state variables
+        \item Can solve for the state $\vec{q}$ independently of the others
+    }
+}
+\eqs{
+\textbf{Change of Basis:}
+\eq{\bmatc{\vec{q}_1[n+1]\\\vdots\\\vec{q}_k[n+1]\\\vdots\\\vec{q}_N[n+1]}=\bmatc{\la_1&&&&0\\&\ddots&&&\\&&\la_k&&\\&&&\ddots&\\0&&&&\la_N}\bmatc{\vec{q}_1[n]\\\vdots\\\vec{q}_k[n]\\\vdots\\\vec{q}_N[n]}=\bmatc{\la_1\vec{q}_1[n]\\\vdots\\\la_k\vec{q}_k[n]\\\vdots\\\la_N\vec{q}_n[n]}}
+\textbf{Decoupled State Evolution Equation}
+\eq{\vec{q}_k[n+1]=\la_k\vec{q}_k[n], \xs{for} k=1,\ldots,N}
+\textbf{Solving independent Decoupled States}\\
+Given $\vec{s}[0]$, $\vec{q}[0]=V\vec{s}[0]$, so:
+\eq{\vec{q}_k[n]=\la_k^n\vec{q}_k[0] \xs{for} k=1,\ldots,N}
+}
+\textbf{Solving $\vec{q}_k$}
+\items{
+    \item $\vec{s}[n]=V\vec{q}[n]\rightarrow\vec{q}[n]=V^{-1}\vec{s}[n]$
+    \item We know initial state $\vec{s}[0]$ so we also know initial state $\vec{q}[0]$ $\rightarrow\vec{q}[0]=V^{-1}\vec{s}[0]$
+    \item So, we have $\vec{q}_k[0]$ (known) and the new state evolution equation $\vec{q}_k[n+1]=\la_k\vec{q}_k[n]$
+    \item This means, $\vec{q}_k[n]=\la_k^n\vec{q}_k[0]$ for $k=1,\ldots,N$
+}
+\subsection*{Basis Transformation}
+\items{
+    \item Canonical basis: set of vectors $e_i$ that form the identity matrix
+    \item Want to use another set of lin. indep. vectors $\vec{z_1},\ldots, \vec{z}_n$ as our principal axes
+    \items{
+        \item $\vec{s}=Z\vec{x}^{[Z]}$ where $Z=span\set{\vec{z_1},\ldots, \vec{z}_n}$
+        \item Want to express vecotr $x$ in terms of vectors in $z$
+        \item $Z$ is a square matrix of linearly independent cols, so it is an invertible matrix
+        \item $\vec{x}^{[Z]}$  represents $\vec{x}$ in the corrdinate sys. given by the $z$'s
+    }
+    \item $x=Z\vec{x}^{[Z]}\implies \vec{x}^{[Z]}=Z^{-1}\vec{x}$, one to one mapping between $x$ and $x^{[Z]}$ because $Z$ is invertible.
+}
+\textbf{Representation of a Linear Transformation in a new Coordinate System}
+\items{
+    \item $\vec{y}=A\vec{x}$ where $\vec{x}=Z\vec{x}^{[Z]}$ and $\vec{y}=Z\vec{y}^{[Z]}$
+    \item So, $Z\vec{y}^{[Z]}=AZ\vec{x}^{[Z]}$ and $Z$ is invertible, so,
+    \item $\vec{y}^{[Z]}=Z^{-1}AZ\vec{x}^{[Z]}\rightarrow y=Ax$
+    \items{
+        \item $A$ takes the vector $x$ and maps it to the vector $y$ in the orginal coordinate system
+        \item In the new coordinate system, the same linear transformation maps the coordinate vector for $x$ into the coordinate vector for $y$ by $A^{[Z]}=Z^{-1}AZ$, the transfomation matrix in the new coordinate system
+    }
+    \item If $Z=V$ (eigenvector matrix for $A$) where $A=V\La V^{-1}$
+    \items{
+        \item Then the coordinate transformation diagonlizes $A$
+        \item $A^{[Z]}=V^{-1}AV=V^{-1}V\La V^{-1}V=\La$
+        \item Switching to this new coordinate system and diagonalizing matrix $A$ decouples the state variables in the new coordinate system
+    }
+}
+\eqs{
+\textbf{From Canonical Coordinate System to Coordinate System of $Z$}
+\eq{\vec{y}^{[Z]}=A^{[Z]}\vec{x}^{[Z]}\xs{where}A^{[Z]}=Z^{-1}AZ}
+\textbf{Transformations Across Coordinate Systems}
+\eq{y\rightarrow y\vec{y}^{[Z]}=Z^{-1}y}
+\eq{x\rightarrow x\vec{x}^{[Z]}=Z^{-1}x}
+\eq{A\rightarrow A^{[Z]}=Z^{-1}AZ}
+\textbf{If $Z=V$ (eigenvector matrix for $A$) where $A=V\La V^{-1}$}
+\eq{A^{[Z]}=\La}
+}
+\example{
+\textbf{Fibonacci Sequence}\\
+\dcoleq{
+$\vec{s}[0]=\bmat{1\\0}$
+}{
+\dtikz{
+\node[state] (a) {1};
+\node[state] (b) [right of=a]  {2};
+\draw[->] (a) edge[bend left] node {1} (b);
+\draw[->] (b) edge[bend left] node {1} (a);
+\draw[->] (a) edge[loop] node {1} (a);
+}}
+}{
+$\vec{s}[n+1]=A\vec{s}[n]$\\
+$A=\bmat{1&1\\1&0}$\\
+\begin{minipage}{.2\linewidth}$\vec{s}[1]=A\vec{s}[0]=\bmat{1\\1}$\end{minipage}
+\begin{minipage}{.2\linewidth}$\vec{s}[2]=A\vec{s}[1]=\bmat{2\\1}$\end{minipage}
+\begin{minipage}{.2\linewidth}$\vec{s}[3]=A\vec{s}[2]=\bmat{3\\2}$\end{minipage}
+\begin{minipage}{.2\linewidth}$\vec{s}[4]=A\vec{s}[3]=\bmat{5\\3}$\end{minipage}
+\begin{minipage}{.2\linewidth}$\vec{s}[5]=A\vec{s}[4]=\bmat{8\\5}$\end{minipage}\\
+\textbf{Eigendecomposition of A}\\
+Find ($\la_1, \vec{v}_1$) ($\la_2,\vec{v}_2$)\\
+$\vec{s}[n]=\alpha_1\la_1^n\vec{v}_1+\alpha_2\la_2^n\vec{v}_2$ where $\alpha_1, \alpha_2$ are determined by initial state: $\vec{s}[0]=\bmat{1\\0}$ s.t. $\bmat{\vec{v}_1&\vec{v}_2}\bmat{\alpha_1\\\alpha_2}=\bmat{1\\0}$
+\textbf{Solve $A-\la I$}
+$A-\la I = \bmat{1-\la&1\\1&-\la}$ where $\det(A-\la I)=-\la(1-\la)-1=la^2-\la-1=0$\\
+Roots: $\frac{1\pm\sqrt{5}}{2}$, $\la_1=\frac{1-\sqrt{5}}{2}$, $\la_2=\frac{1+\sqrt{5}}{2}$ (\textbf{Golden Ratio})
+}
+\end{document}

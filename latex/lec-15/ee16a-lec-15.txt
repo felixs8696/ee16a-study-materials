@@ -1,0 +1,31 @@
+Circuit: Create fixed charge by running a current for a fixed amount of time and dumping that charge on a variable capacitor and V = Q/C, so you get a variable voltage
+
+Scaling OpAmps:
+Example at 46:53
+DAC Vmax  = 3.3V, Vmin= 0
+Most speakers can be modeled with an 8ohm resistor to ground
+Need OpAmp to scale VDAC to the range of the speaker without creating a blocking pattern
+
+Negative Feedback Loop:
+Compare input against scaled feedback (from output)
+Feed result into a linear gain (A) to produce the output
+Send output into scaled feedback loop to compare against input
+    If feedback > input, error is negative, output is pushed down, which causes the feedback to go down... etc.
+    feedback will approach the input
+
+Golden Rules:
+1. I+ = I- = 0 (always true for ideal op amps)
+2. V+ = V- (only true with negative feedback)
+
+OpAmp Negative Feedback Loop Analysis:
+Input voltage connected to OpAmp, with Vout
+Negative Feedback loop with two resistors between Vout and V- 
+    Because V- is an open circuit, I1 = I2
+GR 1. I+ = I- = 0
+    KCL at node between R_1, R_2: I_1 = I_2 (because I- = 0)
+GR 2. V+ = V-
+    V+ = V- : V_in = Vfb
+Ohm's Law on R_2 because V_2 = V_fb:
+    I_2 = V_fb/R_2 = V_in/R_2 = I_1
+KVL of path from ground to V_out through R_1:
+    V_out = V_fb+I_1 R_1 = V_in+V_in R_1/R_2 = V_in(1+R_1/R_2)

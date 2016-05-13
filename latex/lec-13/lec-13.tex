@@ -1,0 +1,69 @@
+\documentclass{article}\usepackage{amsmath,amssymb,amsthm,tikz,tkz-graph,color,chngpage,soul,hyperref,csquotes,graphicx,floatrow}\newcommand*{\QEDB}{\hfill\ensuremath{\square}}\newtheorem*{prop}{Proposition}\renewcommand{\theenumi}{\alph{enumi}}\usepackage[shortlabels]{enumitem}\usepackage[nobreak=true]{mdframed}\usetikzlibrary{matrix,calc}\MakeOuterQuote{"}\usepackage[margin=0.75in]{geometry} \newtheorem{theorem}{Theorem}
+
+\title{EE16A - Lecture 13 Notes}
+\author{Name: Felix Su$\quad$SID: 25794773}
+\date{Spring 2016$\quad$GSI: Ena Hariyoshi}
+\begin{document}
+\maketitle
+
+%%%% Topic %%%%
+\subsection*{2D Resistance Touch Screens}
+%%%% Notes %%%%
+\begin{itemize}
+    \item Measure y-pos:
+    \begin{itemize}
+        \item Conductive strips on top plate (top: $E_1$, bottom: $E_2$)
+        \item Fig1. Connect Voltage source between $E_1$, $E_2$
+        \item Get voltage between $E_2$, $E_4$ (open circuit) $V_{out}$ over the second resistor of the top plate ($V_{out} = V_2$)
+        \item Use $V_out$ in a voltage divider equation to get the $x$ position
+    \end{itemize}
+    \item Measure y-pos:
+    \begin{itemize}
+        \item Conductive strips on top plate (left: $E_3$, bottom: $E_4$)
+        \item Fig2. Connect Voltage source between $E_3$, $E_4$
+        \item Get voltage between $E_2$, $E_4$ (open circuit) $V_{out}$ over the second resistor of the bottom plate ($V_{out} = V_4$)
+        \item Use $V_out$ in a voltage divider equation to get the $x$ position
+    \end{itemize}
+\end{itemize}
+
+%%%% Topic %%%%
+\subsection*{Passive Sign Convention:}
+%%%% Notes %%%%
+\begin{itemize}
+    \item Current must flow into the positive side of a voltage drop
+\end{itemize}
+
+%%%% Topic %%%%
+\subsection*{Capacitors}
+%%%% Notes %%%%
+\begin{itemize}
+    \item 2 pieces of conductive material (can have current/resistance)
+    \item Separated by non-conductive substance with permittivity, $\varepsilon$
+    \item Applied voltage builds up positive charge on one piece and negative charge on the other
+    \item Capacitance: relationship between charge stored and voltage across it (measure in Farads (coulombs/volt))
+    \item Once $Q = CV$ on surface of plate, current stops flowing
+\end{itemize}
+\textbf{Parallel Capacitance}
+\begin{itemize}
+    \item Sum Capacitances (same as series resistors)
+    \item $C_{par} = C_1 + C_2 + ... + C_n$
+\end{itemize}
+\textbf{Series Capacitance}
+\begin{itemize}
+    \item Inverse of sum of inverses: (same as parallel resistors)
+    \item $C_{ser} = (C_1C_2 \cdots C_n) / (C_1 + C_2 + ... + C_n) = C_1 || C_2$
+\end{itemize}
+\begin{mdframed}
+\textbf{Capacitance Equations:}
+\begin{itemize}
+    \item $d$ = distance between parallel plates
+    \item $\varepsilon$ = permittivity of substance between plates
+    \item $A$ = cross sectional area of plate
+\end{itemize}
+\begin{equation}C = \frac{Q}{V} = \frac{\varepsilon \cdot A}{d}\end{equation}
+\begin{equation}I = C \cdot \frac{dV}{dt}\end{equation}
+\begin{equation}E = \frac{1}{2}CV^2\end{equation}
+\begin{equation}C_{par} = C_1 + C_2 + ... + C_n\end{equation}
+\begin{equation}C_{ser} = C_1 || C_2 = \frac{C_1C_2}{C_1 + C_2}\end{equation}
+\end{mdframed}
+\end{document}

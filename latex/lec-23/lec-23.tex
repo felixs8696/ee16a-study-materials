@@ -1,0 +1,141 @@
+\documentclass{article}\usepackage{amsmath,amssymb,amsthm,tikz,tkz-graph,color,chngpage,soul,hyperref,csquotes,graphicx,floatrow,framed,scrextend,mathtools,mathrsfs}\newcommand*{\QEDB}{\hfill\ensuremath{\square}}\newtheorem*{prop}{Proposition}\renewcommand{\theenumi}{\alph{enumi}}\usepackage[shortlabels]{enumitem}\usepackage[nobreak=true]{mdframed}\usetikzlibrary{matrix,calc}\MakeOuterQuote{"}\usepackage[margin=0.75in]{geometry} \newtheorem{theorem}{Theorem}\newcommand{\Z}{\mathbb Z}\newcommand{\R}{\mathbb R}\newcommand{\Q}{\mathbb Q}\newcommand{\N}{\mathbb N}\newcommand{\x}[1]{\textrm{#1}}\newcommand{\xs}[1]{\textrm{ #1 }}\newcommand{\pr}{\textrm{Pr}}
+\newcommand{\dincludegraphics}{\includegraphics[width=0.5\textwidth]}
+\newcommand{\tincludegraphics}{\includegraphics[width=0.33\textwidth]}
+\newcommand{\sumlim}[3]{\sum\limits_{#1}^{#2}#3}
+\newcommand{\eq}[1]{\begin{equation}#1\end{equation}}
+\newcommand{\w}{\omega}\newcommand{\Om}{\Omega}
+\newcommand{\set}[1]{\{#1\}}
+\newcommand{\scr}[1]{\mathscr{#1}}
+\renewenvironment{leftbar}[2][\hsize]
+{
+    \def\FrameCommand
+    {
+        {\color{#2}\vrule width 3pt}
+        \hspace{0pt}
+    }
+    \MakeFramed{\hsize#1\advance\hsize-\width\FrameRestore}
+}
+{\endMakeFramed}
+\newcommand{\easy}[2]{\begin{leftbar}{#1}#2\end{leftbar}}
+\newcommand{\eqs}[1]{\begin{mdframed}#1\end{mdframed}}
+\newcommand{\simple}[1]{\easy{gray}{\begin{enumerate}[1.]#1\end{enumerate}}}
+\newcommand{\inprod}[2]{\langle #1, #2\rangle}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\newcommand{\items}[1]{\begin{itemize}#1\end{itemize}}
+\newcommand{\bmat}[1]{\begin{bmatrix*}[r]#1\end{bmatrix*}}
+\newcommand{\ds}{\doublespacing}
+\newcommand{\e}{\varepsilon}
+\newcommand{\n}[1]{\x{Null}(#1)}
+
+\title{EE16A - Lecture 23 Notes}
+\author{Name: Felix Su$\quad$SID: 25794773}
+\date{Spring 2016$\quad$GSI: Ena Hariyoshi}
+\begin{document}
+\maketitle
+
+%%%% Topic %%%%
+\subsection*{Matching Pursuit Setup}
+%%%% Notes %%%%
+\simple{
+    \item Received signal $y=\sumlim{k}{}{\alpha_kS^{N_k}\vec{z}_k}$ is a linear combination of delayed versions of the signals sent $z_k$ where $S^{N_k}$ is the circular shift matrix
+    \item Sparse Representation: The linear combination (received signal) of the delayed messages contains very few terms relative to the max number of broadcasted signals.
+}
+\items{
+    \item Scenario: A lot of players are trying to communicate with you, but you can only receive a few at the time.
+    \item Say you have$L=2000$ players (trying to communicate), each sends a message $\vec{z}_k \in \R^{N=400}$
+    \item Usually $L>N$ and typically $L>>N$
+    \item Received vector $y=\sumlim{k}{}{\alpha_kS^{N_k}\vec{z}_k}$, which is a linear combination of delayed versions of the signals sent $z_k$ where $S^{N_k}$ is the circular shift matrix.
+    \item Sparse Representation: The linear combination (received signal) of the delayed messages contains very few terms relative to the 2000 possible terms.
+}
+\textbf{Sparsity (Using Dictionary)}
+\simple{
+    \item Use a larger, more specific dictionary to make sparser messages
+}
+\items{
+    \item The larger the dictionary is, the more specific descriptions can be and the less words you need to use to convey a message.
+    \item Dictionary contains all the circularly shifted forms of the messages, so it will be of size $L\times N$ (no. of msgs $\times$ no. of possible shifts = msg. vec length)
+    \items{
+        \item Called a \textbf{Redundant Dictionary}
+        \item $D=\set{\vec{z}_1S_{z_1}\ldots\vec{z}_1S^{N-1}_{z_1}|\vec{z}_2S_{z_2}\ldots\vec{z}_2S^{N-1}_{z_2}|\ldots\vec{z}_nS^{N-1}_{z_n}}$
+        \item Assume: $D$ is complete and includes $N$ linearly independent vectors
+        \item Assume: Every vector is unit length, $\norm{\vec{z}_1}=1$
+        \item Cannot Assume: Orthogonality
+    }
+    \item Now let $D=\set{\phi_1,\ldots,\phi_T}, T=$ Dictionary size
+    \item Need to figure out which subset of $\phi_k$'s is represented in the received signal $y$.
+    \item Simplification: Assume no delay, so $y=\sumlim{k}{}{\alpha_k\vec{z}_k}$ and $D=\set{\phi_1=\vec{z}_1,\ldots,\phi_L=\vec{z}_L}$
+    \item Residuals will approach 0.
+}
+%%%% Topic %%%%
+\subsection*{Matching Pursuit Algorithm}
+%%%% Notes %%%%
+\simple{
+    \item Take observation vector $y$ as the initial residual vector $r^{[0]}$
+    \item Project each residual $r^{[m-1]}$ onto the space of each of the vectors in the dictionary $D$ and pick the maximum projection. (Choose a $\phi_k\in D$ s.t. $\vec{v}_m=\x{ argmax}_k\abs{\inprod{\vec{r}^{[m-1]}}{\phi_k}}$)
+    \item Write out equation for residual: $r^{[m-1]}=\inprod{\vec{r}^{[m-1]}}{\vec{v}_m}\vec{v}_m+\vec{r}^{[m]}$ where $r^{[m]}\bot \vec{v}_m$
+    \item Decompose the next residual ($r^{[m]}$)
+    \item Resulting signal at iteration $M$ is $\vec{y}=\sumlim{m=0}{M-1}{\inprod{r^{[m]}}{\vec{v}_{m+1}}\vec{v}_{m+1}}+\vec{r}^{[M]}$
+}
+\items{
+    \item A greedy algorithm: Step by step. At each step, search for a local optimum to reach a global optimum.
+    \item Goal: Estimate $y\in\R^N$ by finding the main signal contributors
+    \items{
+        \item Let $M=$ no. of terms in the estimation (signal contributors)
+        \item Let $D=\set{\phi_l}, L=1,\ldots,L$ where $L\ge M$ and $L>N (\phi_L\in\R^N)$
+        \item $D$ is complete and $\norm{\phi_l}=1$
+    }
+    \item At each step you have \textbf{Residue of $y$}=$\vec{r}^{[0]}$ (unaccounted portion)
+    \item Step 0: $\vec{r}^{[0]}=y$
+    \item Step 1: Choose a $\phi_k\in D$ s.t. $\vec{v}_1=\x{ argmax}_k\abs{\inprod{y}{\phi_k}}$
+    \items{
+        \item Choose $\phi_k$ that gives the largest projection of $y$ onto $\phi_k$
+        \item Write $y=\inprod{\vec{y}_1, \vec{v}_1}\vec{v}_1+\vec{r}^{[1]}$ where $r^{[1]}\bot \vec{v}_1$
+        \item $\norm{\vec{y}}^2=\norm{\inprod{\vec{y}_1, \vec{v}_1}\vec{v}_1}^2+\norm{\vec{r}^{[1]}}^2=\abs{\inprod{\vec{y}_1, \vec{v}_1}}^2\norm{\vec{v}_1}^2+\norm{\vec{r}^{[1]}}^2$
+        \item $\norm{\vec{y}}^2=\abs{\inprod{\vec{y}_1, \vec{v}_1}}^2+\norm{\vec{r}^{[1]}}^2$ (becuase $\vec{v}_1$ has unit length)
+    }
+    \item Step 2: Decompose $\vec{r}^{[1]}$: Find the vector in $D$ that best represents $\vec{r}^{[1]}$
+    \items{
+        \item Choose a $\phi_k\in D$ s.t. $\vec{v}_2=\x{ argmax}_k\abs{\inprod{\vec{r}^{[1]}}{\phi_k}}$
+        \item $\vec{r}^{[1]}=\inprod{\vec{r}^{[1]}}{\vec{v}_2}\vec{v}_2+\vec{r}^{[2]}$ where $r^{[2]}\bot \vec{v}_2$
+        \item $r^{[2]}$ may not be (probably not) $\bot \vec{v}_1$
+    }
+    \item Step $m$: Decompose $\vec{r}^{[m-1]}$
+    \items{
+        \item $\vec{v}_y^{[m-1]}=\inprod{\vec{r}^{[m-1]}}{\vec{v}_m}\vec{v}_m+\vec{r}^{[m]}$
+        \item To stop at iteration $M$, express $\vec{y}=\sumlim{m=0}{M-1}{\inprod{r^{[m]}}{\vec{v}_{m+1}}\vec{v}_{m+1}}+\vec{r}^{[M]}$
+    }
+    \item Residuals approach 0
+    \items{
+        \item $\norm{\vec{y}}^2=\sumlim{m=0}{M-1}{\abs{\inprod{r_y^{[M]}}{\vec{v}_{m+1}}}^2+\norm{\vec{r}_y^{[M]}}^2}$
+        \item Fixed term on left
+        \item Sum of positive terms on right plus risidual
+        \item As sum increases last residual must decrease for each step
+    }
+}
+%%%% Topic %%%%
+\subsection*{Another View of the Matching Pursuit Algorithm}
+%%%% Notes %%%%
+\simple{
+    \item If $A_m$ has Orthonormal Columns: $A_m^TA_m=I$
+}
+\items{
+    \item Start with $y=r^{[m]}$ (observed measurement)
+    \item Create a matrix $A_m$ at each step that has the columns of the vectors in the dictionary you have obtained up to that point. (Matrix of principal directions up to this step)
+    \item Start from $m=1$: while $r^{[m]}\ne 0$, look for principal direction: $\vec{v}_m=\x{argmax}_k\abs{\inprod{r^{[m]}}{\vec{z}_k}}$
+    \items{
+        \item argmax: Scan all indices $k$, on $k$ for which the inner product is the largest, use that inner product and assign $\vec{v}_m=\vec{z}_k$ as the $m$th principal direction
+    }
+    \item Augment matrix of principal directions: $A_m=\bmat{A_{m-1}|\vec{v}_m}$
+    \item Project $y$ onto sol. space of $A_m$: $\vec{y}=A_m\alpha_m+\vec{\e}$
+    \item Approximate $y$ in Least Squares sense
+    \items{
+        \item $\vec{y}_m=A_m\hat{\alpha}_m$ where $\hat{\alpha}_m$ is the LS soln to $A_m\alpha_m=\vec{y}$
+        \item $\hat{\alpha}_m=(A_m^TA_m)^{-1}A_m^T\vec{y}$
+        \item $\vec{y}_m=A_m(A_m^TA_m)^{-1}A_m^T\vec{y}$
+        \item $\vec{r}_m=\vec{y}-\vec{y}_m$
+        \item Problem: When columns of $A_m$, the principal directions $\vec{v}_k$ are not orthogonal, the LS soln, is very costly.
+    }
+    \item Keep iterating forward: $m=m+1$ until end.
+}
+\end{document}

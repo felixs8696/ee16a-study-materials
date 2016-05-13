@@ -1,0 +1,43 @@
+Midterm Practice:
+Thevenin/Norton Circuit Practice
+
+Lecture 13 Notes:
+Thevenin/Norton circuits have same relationship between Voltage in the circuit and the Current coming out of it as the original circuit (does not say anything about inside the actual circuit)
+Ex. Power consumed by original circuit does not equal the power consumed by the T/N circuit (Power is non-linear)
+
+Measure x=position of 2D Touch Screen:
+Conductive strips on top plate (top: E1, bottom: E2)
+Conductive strips on bottom plate (left: E3, right: E4)
+Fig1. Connect Voltage source between E1, E2
+Fig2. Connect Voltage source between E3, E4
+Both: Measure the voltage between E2, E4 (open circuit) to get Vout over the second resistor of the plate in question
+    Fig1. Vout = V4
+    Fig2. Vout = V2
+        Use Vout in a voltage divider equation to get the x and y positions
+
+Passive Sign Convention:
+Current must flow into the positive side of a voltage drop
+
+Capacitor:
+2 pieces of conductive material (can have current/resistance)
+Separated by non-conductive substance
+Applied voltage builds up positive charge on one piece and negative charge on the other
+Capacitance = relationship between charge stored and voltage across it: C (farad) = Q/V
+
+d = distance between parallel plates
+e = epsilon (permittivity of substance between plates)
+A = cross sectional area of plate
+C = (eA)/d
+
+Once Q = CV on surface of plate, current stops flowing
+I = dQ/dt and Q = CV, therefore, I = C(dV/dt)
+
+Energy stored in capacitor = .5CV^2
+(depends on voltage stored in capacitor)
+
+Parallel Capacitance (sum: same as series resistors) C_1...C_n:
+C_par = C_1 + C_2 + ... + C_n
+
+Series Capacitance (inverse of sum of inverses: same as parallel resistors)
+C_1...C_n:
+C_ser = (C_1C_2...C_n) / (C_1 + C_2 + ... + C_n) = C_1 || C_2
