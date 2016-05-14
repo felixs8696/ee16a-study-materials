@@ -1,0 +1,114 @@
+\documentclass{article}\usepackage{amsmath,amssymb,amsthm,tikz,tkz-graph,color,chngpage,soul,hyperref,csquotes,graphicx,floatrow,framed,scrextend,mathtools,mathrsfs,setspace}\newcommand*{\QEDB}{\hfill\ensuremath{\square}}\newtheorem*{prop}{Proposition}\renewcommand{\theenumi}{\alph{enumi}}\usepackage[shortlabels]{enumitem}\usepackage[nobreak=true]{mdframed}\usetikzlibrary{matrix,calc}\MakeOuterQuote{"}\usepackage[margin=0.75in]{geometry} \newtheorem{theorem}{Theorem}\newcommand{\Z}{\mathbb Z}\newcommand{\R}{\mathbb R}\newcommand{\Q}{\mathbb Q}\newcommand{\N}{\mathbb N}\newcommand{\x}[1]{\textrm{#1}}\newcommand{\xs}[1]{\textrm{ #1 }}\newcommand{\pr}{\textrm{Pr}}
+\newcommand{\dincludegraphics}{\includegraphics[width=0.5\textwidth]}
+\newcommand{\tincludegraphics}{\includegraphics[width=0.33\textwidth]}
+\newcommand{\fpic}{\includegraphics[width=\textwidth]}
+\newcommand{\dpic}{\dincludegraphics}
+\newcommand{\tpic}{\tincludegraphics}
+\newcommand{\sumlim}[3]{\sum\limits_{#1}^{#2}#3}
+\newcommand{\eq}[1]{\begin{equation}#1\end{equation}}
+\newcommand{\w}{\omega}\newcommand{\Om}{\Omega}
+\newcommand{\set}[1]{\{#1\}}
+\newcommand{\scr}[1]{\mathscr{#1}}
+\renewenvironment{leftbar}[2][\hsize]
+{
+    \def\FrameCommand
+    {
+        {\color{#2}\vrule width 3pt}
+        \hspace{0pt}
+    }
+    \MakeFramed{\hsize#1\advance\hsize-\width\FrameRestore}
+}
+{\endMakeFramed}
+\newcommand{\easy}[2]{\begin{leftbar}{#1}#2\end{leftbar}}
+\newcommand{\eqs}[1]{\begin{mdframed}#1\end{mdframed}}
+\newcommand{\simple}[1]{\easy{gray}{\begin{enumerate}[1.]#1\end{enumerate}}}
+\newcommand{\inprod}[2]{\langle #1, #2\rangle}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\newcommand{\items}[1]{\begin{itemize}#1\end{itemize}}
+\newcommand{\bmatl}[1]{\begin{bmatrix*}[l]#1\end{bmatrix*}}
+\newcommand{\bmat}[1]{\begin{bmatrix*}[r]#1\end{bmatrix*}}
+\newcommand{\bmatc}[1]{\begin{bmatrix*}[c]#1\end{bmatrix*}}
+\newcommand{\ds}{\doublespacing}
+\newcommand{\e}{\varepsilon}
+\newcommand{\la}{\lambda}
+\newcommand{\n}[1]{\x{Null}(#1)}
+\newmdenv[topline=false, rightline=false, bottomline=false,%
+  linewidth=3pt, innerrightmargin=0pt, leftmargin=4pt,%
+  innerleftmargin=5pt, skipabove=5pt, skipbelow=5pt]{mdleftbar}
+\newcommand{\example}[2]{\textbf{Example: }\\#1\begin{mdleftbar}\onehalfspacing{#2}\end{mdleftbar}}
+\usetikzlibrary{arrows, automata}
+\newcommand{\dtikz}[1]{
+\begin{center}
+\begin{tikzpicture}[> = stealth, shorten > = 1pt, auto, node distance = 2.5cm,semithick]
+\tikzstyle{every state}=[draw = black,thick,fill = white,minimum size = 4mm]
+#1
+\end{tikzpicture}
+\end{center}
+}
+\newcommand{\ninfty}{n\rightarrow\infty}
+\newcommand{\La}{\Lambda}
+\newcommand{\limty}{\lim_{n\rightarrow\infty}}
+\newcommand{\dcol}[2]{\begin{minipage}{.5\linewidth}#1\end{minipage}\begin{minipage}{.5\linewidth}#2\end{minipage}}
+\newcommand{\dcoleq}[2]{\dcol{\begin{center}#1\end{center}}{\begin{center}#2\end{center}}}
+
+\begin{document}
+\subsection*{Gram Schmidt Algorithm} Takes a set of linearly independent vectors $\set{~v_1,...,~v_n}$, generates orthonormal set of vectors $\set{w_1,...,w_n}$ that span the same vector space as the original set.
+$\set{w_1,...,w_n}$ needs to satisfy the following:
+\items{
+	\item span($\set{v_1,..., v_n}$) = span($\set{w1,...,wn}$)
+	\item $\set{w_1,...,w_n}$ is an orthonormal set of vectors.
+}
+\eqs{
+\textbf{Step 1:} $\vec{w}_1 =\frac{\vec{v}_1}{\norm{v_1}}$ 
+\textbf{Step 2:} $e_2 =\vec{v}_2 -(\vec{v}_2^T\vec{w}_1)\vec{w}_1$; $\vec{w}_2 =\frac{\vec{v}_2}{\norm{v_2}}$;
+\textbf{Step 3:} $e3 =\vec{v}_3 - (\vec{v}_3^T\vec{w}_2)\vec{w}_2-(\vec{v}_3^T\vec{w}1)\vec{w}_1$; $\vec{w}_3 =\frac{\vec{v}_3}{\norm{v_3}}$ 
+\textbf{Continue summation for further vectors}
+}
+\textbf{Cauchy-Schwarz:} $\norm{\vec{x},\vec{y}} \le \norm{\vec{x}}\cdot\norm{\vec{y}}$
+\textbf{Triangle Inequality:} $\norm{\vec{x}+\vec{y}}\le\norm{x}+\norm{y}$\\
+\textbf{Inner/Dot product:} $\inprod{\vec{x}}{\vec{y}} =\vec{x}^T\vec{y}$\\
+If $x, y, z$ are vectors and $c$ is a scalar then, $\inprod{x}{y} = \inprod{y}{x}$ (symmetry); $\inprod{cx}{y} = c\inprod{x}{y}$ (homogeniety); $\inprod{x + y}{z} = \inprod{x}{z} + \inprod{y}{z}$ (additivity) In $R^2: \inprod{x}{y} = \abs{x}\abs{y} cos(\theta)$
+If $x$ orthogonal to $y$, $\inprod{x}{y} = 0$; Thus, \textbf{orthogonality} in $R^n$ = inner product of 0 \textbf{Outerproduct:} $\vec{x}\otimes\vec{y} =\vec{x}\vec{y}^T$  The order of the vectors does not matter when you take an inner product, but it does matter when you take an outer product.\\
+The larger the magnitude of the inner/dot product, the more similar the two vectors are.\\
+\textbf{Linear Least Squares:} \textbf{Step 1:} $\hat{x} = (\vec{a}^T\vec{a})^{-1}\vec{a}^Tb$ \textbf{Step 2:} $e =\vec{b}-\vec{\hat{b}} =\vec{b}-\hat{x}\vec{a}$ \textbf{Sum of Square Errors:} $e^T\vec{e}$\\
+\textbf{LLSE with Matrix A:} $\hat{x} =(A^TA)^{-1}A^T\vec{b}$ \textbf{Euclidean Norm:} $\norm{\vec{x}}=\sqrt{\vec{x}_1^2+\vec{x}_2^2+...+\vec{x}_n^2}=\sqrt{\inprod{\vec{x}}{\vec{x}}}$\\
+\textbf{Projection:} Project vector $a$ onto vector $b$: $\x{proj}_ba = \frac{\inprod{a}{b} \cdot b}{\inprod{b}{b}}$
+\textbf{Direction of projection:} $\hat{b} = \frac{b}{\abs{b}} = \frac{b}{\sqrt{(\inprod{b}{b})}}$
+\textbf{Magnitude of projection:} $\abs{a} \cos(\theta) = \abs{a} \abs{\hat{b}} cos (\theta) = \inprod{a}{\hat{b}}$
+Thus, projection vector is: $\inprod{a}{\hat{b}} \hat{b} = \frac{\inprod{a}{b} \cdot b}{\inprod{b}{b}}$\\
+\textbf{OMP:} Suppose $\vec{x} \in R^d$ is the sparse vector we want to measure, with $m$ non-zero entries (its sparsity). Let $S$ be the $n×d$ measurement matrix with columns $\vec{S}_i$ such that: $\bmat{\vec{S}_1&\cdots&\vec{S}_d} \vec{x} =\vec{y}$ where the vector $\vec{y} \in R^n$ is the results from the n measurements of $\vec{x}$. \textbf{OMP works even when the number of measurements is less than the number of dimensions ($n < d$)} \textbf{Procedure:}
+1. Find the vector $\vec{S}^*$ (not chosen before) with the highest correlation with $\vec{y}$.
+2. Use least squares to project $\vec{y}$ onto the subspace spanned by the vectors already found in previous
+steps and $\vec{S}^*$, then find the residue $~r$ (this is the quantity minimized by least squares).
+3. Repeat the above steps using $~r$ in place of $\vec{y}$ for a total of m times, the sparsity of vector $\vec{x}$.\\
+\dpic{12_1}
+\dpic{12_2}
+\dpic{12_3}
+\dpic{omp}
+\textbf{Diagonlization:} $A^n=V\La^nV^{-1}=\sumlim{i=1}{N}{\la_i^n\vec{v}_i\vec{w}_i^T}$
+\eqs{
+\textbf{Pagerank Importance Score}\\
+Converges to the value $A^ns[0]$ where:
+\eq{\limty A^n=\la_i\vec{v}_i\vec{w}_i^T=\vec{v}_i\vec{w}_i^T\xs{where}\la_i=1\xs{if}\abs{\la_i}<1\forall i=1,\ldots,N-1}
+}
+\textbf{Determinants} 1. If you scale a row/col of a matrix by $\alpha$, the determinant of the matrix is multiplied by $\alpha$
+2. If you add a scalar multiple of a row/col to any other row/col, the determinant doesn?t change
+3. If you swap rows, the determinant is multiplied by $-1$\\
+\textbf{Solve for Eigenvalues/Eigenvectors}
+\eqs{
+\textbf{Solve for $\la$:} $\det(A-\la I)=0$\\
+\textbf{Determinant of a $n\times n$ matrix}\\
+Mult. each elem. in the first row by the det. of the $n-1\times n-1$ matrix not in that element's row or column\\
+Take an \textbf{alternating sum} of the products from the previous step\\
+$\det\bmat{a&b&c\\d&e&f\\g&h&i}=a\times\det\bmat{e&i\\f&h} - b\times\det\bmat{d&i\\f&g}+ c\times\det\bmat{d&h\\e&g}$\\
+\textbf{Plug resulting Eigenvalues $\la_i$ into $A-\la_i I$:} $B_i=A-\la_i I$\\
+\textbf{Solve for Eigenvectors $\vec{v}_i$ s.t.} This will be the linear combination of the columns of $B_i$ that cause $B_i\vec{v}_i=0$: $(A-\la_i I)\vec{v}_i=B_i\vec{v}_i=0$
+}
+\textbf{Pagerank State Transition:} $\vec{s}[n+1]=A\vec{s}[n]=\alpha_1\la_1^n\vec{v}_1+\alpha_2\la_2^n\vec{v}_2$
+\textbf{Cross Correlation:} $T = \x{argmax}(\x{crossCorr}(x, y)) = \x{argmax}(C_x^T y)$; \textbf{Intuition:} We shift $x$ around until it has the maximum correlation with $y$, the received signal
+\textbf{Locationing:} With $n+1$ beacons, uniquely locate a beacon in $R^n$; Each beacon provides equation: $(x - a)^2 + (y - b)^2 = r^2$ (x, y = location of object, a, b = location of beacon, r = distance from beacon to object (may be noisy)); Convert nonlinear equations to one linear equation by expanding and subtracting; Convert equation to matrix $A$ and use \textbf{LLSE:} $\hat{x} =(A^TA)^{-1}A^T\vec{b}$ to solve for $x,y$. \textbf{Ways to Solve Lin. Sys.:} Perfect information: $x = A^{-1}b$; Noisy information: $x = (A^TA)^{-1}A^T\vec{b}$; Sparse information: $x = \x{OMP}(A, b)$
+
+
+
+\end{document}
